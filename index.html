@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Arc">
+<meta name="theme-color" content="#1c1c1e">
+<title>Arc</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%231c1c1e'/%3E%3Cpath d='M4 18C7.5 6 16.5 6 20 18' fill='none' stroke='%23f5c542' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#1c1c1e;--panel:#262628;--panel2:#2f2f32;--line:#3a3a3d;--txt:#e8e8ea;--dim:#9a9aa0;--acc:#f5c542;--hdw:92px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--txt);font:14px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
+header{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;background:rgba(28,28,30,.94);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:19px;letter-spacing:.3px}
+.hbtns{display:flex;gap:6px}
+.hbtn{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px}
+main{padding:12px 0 calc(env(safe-area-inset-bottom) + 28px)}
+.wrap{padding:0 16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 16px 12px}
+.card h3{margin:0 0 10px;font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:var(--dim);font-weight:600}
+.opt{text-transform:none;letter-spacing:0;font-weight:400;color:#77777d}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:13px}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#1c1c1e;font-weight:600}
+.echip{display:inline-flex;align-items:center;gap:6px}
+.echip i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.echip.on{background:#3b3b40;border-color:#5c5c62;color:var(--txt);font-weight:500}
+.echip:not(.on){opacity:.42}
+.grp{margin-bottom:10px}
+.grp small{display:block;color:var(--dim);font-size:11px;margin-bottom:6px}
+.seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:2px;gap:2px}
+.seg button{flex:1;background:none;border:0;border-radius:7px;padding:7px 4px;font-size:13px;color:var(--dim)}
+.seg button.on{background:#4a4a50;color:var(--txt);font-weight:600}
+.seg button small{display:block;font-size:10px;opacity:.75;font-weight:400}
+.seg+.seg{margin-top:8px}
+.hint{color:var(--dim);font-size:12px;margin:8px 0 0}
+.bpm{display:flex;align-items:center;gap:8px}
+.bpm button{width:42px;height:42px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);font-size:20px}
+.bpm input{width:88px;height:42px;text-align:center;background:#161618;border:1px solid var(--line);border-radius:10px;color:var(--txt);font-size:21px;font-weight:600;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.bpm input::-webkit-inner-spin-button{-webkit-appearance:none}
+.bpm span{color:var(--dim);font-size:12px}
+.primary{display:block;width:calc(100% - 32px);margin:6px 16px;padding:15px;border:0;border-radius:12px;background:var(--acc);color:#1c1c1e;font-weight:700;font-size:16px}
+/* arrange */
+.top{padding:0 16px}
+.title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.title h2{margin:0;font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info{color:var(--dim);font-size:12px;font-variant-numeric:tabular-nums;margin-top:2px}
+.tools{display:flex;gap:6px;align-items:center;margin-top:8px}
+.tools .seg{flex:1}
+.ib{height:34px;min-width:34px;padding:0 9px;border-radius:9px;background:var(--panel2);border:1px solid var(--line);font-size:15px;white-space:nowrap}
+.ib.acc{background:var(--acc);border-color:var(--acc);color:#1c1c1e;font-weight:600;font-size:14px}
+.zoomgrp{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.zoomgrp .ib{border:0;border-radius:0;background:var(--panel2)}
+.zoomgrp .ib+.ib{border-left:1px solid var(--line)}
+.grid{overflow-x:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#19191b;margin-top:10px}
+.gin{position:relative}
+.row{display:flex}
+.hd{position:sticky;left:0;z-index:4;width:var(--hdw);flex:0 0 var(--hdw);background:#232325;border-right:1px solid var(--line);border-bottom:1px solid #2b2b2e;padding:0 7px;display:flex;flex-direction:column;justify-content:center;font-size:11px;overflow:hidden}
+.hd b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:5px}
+.hd b i{width:5px;height:14px;border-radius:2px;flex:none}
+.hd small{color:var(--dim);font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:10px}
+.lane{position:relative;flex:none;border-bottom:1px solid #2b2b2e;background-image:repeating-linear-gradient(to right,#2d2d30 0 1px,transparent 1px calc(var(--bw) * 4))}
+.z-lo .lane{background-image:repeating-linear-gradient(to right,#2d2d30 0 1px,transparent 1px calc(var(--bw) * 16))}
+.r-ruler .lane,.r-ruler .hd{height:20px}
+.r-ruler .lane{background:#202022}
+.mk{position:absolute;top:3px;font-size:9px;color:var(--dim);padding-left:2px;border-left:1px solid #4a4a4e;height:14px;line-height:14px;font-variant-numeric:tabular-nums}
+.z-mid .mk:not(.m8),.z-lo .mk:not(.m16){display:none}
+.r-sec .lane,.r-sec .hd{height:26px}
+.sec{position:absolute;top:3px;bottom:3px;border-radius:4px;overflow:hidden;font-size:10px;font-weight:600;color:#fff;padding:0 5px;line-height:20px;white-space:nowrap;text-overflow:clip;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);text-shadow:0 1px 1px rgba(0,0,0,.3)}
+.sec.sel{box-shadow:inset 0 0 0 2px #fff}
+.r-energy .lane,.r-energy .hd{height:60px}
+.r-energy .hd small{padding-left:0;font-size:10px;color:var(--acc)}
+.r-trk .lane,.r-trk .hd{height:28px}
+.reg{position:absolute;top:3px;bottom:3px;border-radius:3px;font-size:9px;color:rgba(0,0,0,.78);padding:0 4px;line-height:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;border-top:1px solid rgba(255,255,255,.25)}
+.nolbl .reg{color:transparent}
+.selcol{position:absolute;top:0;bottom:0;background:rgba(255,255,255,.055);pointer-events:none;z-index:1}
+.playhead{position:absolute;top:0;bottom:0;width:1px;background:#fff;pointer-events:none;z-index:3;box-shadow:0 0 4px rgba(255,255,255,.6)}
+.gesture{color:var(--dim);font-size:11px;text-align:center;margin:6px 16px 0}
+.detail{margin:12px 16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.dh{display:flex;align-items:center;gap:8px;font-size:17px;flex-wrap:wrap}
+.dot{width:10px;height:10px;border-radius:3px}
+.badge{font-size:11px;background:#3a3a3e;padding:2px 8px;border-radius:999px;color:var(--txt);font-weight:500}
+.meta{color:var(--dim);font-size:12px;margin-top:3px;font-variant-numeric:tabular-nums}
+.len{display:flex;align-items:center;gap:10px;margin:10px 0 4px}
+.len button{width:38px;height:34px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);font-size:18px}
+.len span{min-width:90px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+.ph{border-top:1px solid var(--line);padding:9px 12px;margin:0 -14px;border-left:3px solid transparent}
+.ph.on{border-left-color:var(--acc);background:rgba(245,197,66,.06)}
+.pr{font-size:11px;color:var(--dim);font-variant-numeric:tabular-nums}
+.pn{margin:2px 0 6px}
+.up{color:var(--acc)}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:11px;padding:2px 7px;border-radius:5px;background:#333337;display:inline-flex;gap:5px;align-items:center}
+.tag i{width:6px;height:6px;border-radius:50%}
+.sub{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--dim);margin:12px 0 6px}
+.idea{margin-top:10px;padding:9px 11px;border-radius:9px;background:rgba(245,197,66,.1);border:1px solid rgba(245,197,66,.3);font-size:13px}
+.vt{font-size:20px;margin:4px 0 12px}
+.item{display:flex;align-items:stretch;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;overflow:hidden}
+.iopen{flex:1;text-align:left;background:none;border:0;padding:11px 14px}
+.iopen b{display:block;font-size:15px}
+.iopen small{color:var(--dim);font-size:12px}
+.idel{background:none;border:0;border-left:1px solid var(--line);width:48px;color:var(--dim);font-size:15px}
+.empty{color:var(--dim);text-align:center;padding:40px 10px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%);background:#3a3a3e;color:var(--txt);padding:9px 16px;border-radius:999px;font-size:13px;z-index:50;box-shadow:0 6px 20px rgba(0,0,0,.4);transition:opacity .3s}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 18C7.5 6 16.5 6 20 18" fill="none" stroke="#f5c542" stroke-width="2.6" stroke-linecap="round"/></svg>Arc</div>
+  <div class="hbtns" id="hbtns"></div>
+</header>
+<main id="view"></main>
+<script>
+/* ============ DONNÉES ============ */
+const EL={
+ k:{name:'Kick',w:3,c:'#E9C46A',lv:['','doux','régulier','plein']},
+ s:{name:'Snare / Clap',w:1.5,c:'#F4A261',lv:['','léger','backbeat','plein + fills']},
+ d:{name:'Batterie',sn:'Reste batterie',w:1.5,c:'#D9B64E',lv:['','hats seuls','hats + ride','batterie full']},
+ p:{name:'Percus',w:1,c:'#CF9A57',lv:['','légères','groove','chargées']},
+ b:{name:'Basse',w:2.5,c:'#9B7BE0',lv:['','notes tenues','groove','à fond']},
+ r:{name:'Rythmique',w:1.5,c:'#4FB286',lv:['','épars','groove','plein']},
+ a:{name:'Nappe',w:1,c:'#3BA8A0',lv:['','discrète','présente','ample']},
+ l:{name:'Lead',w:1.5,c:'#4A90E2',lv:['','esquisse','mélodie','hook complet']},
+ i:{name:'Intensité',w:2,c:'#E05D5D',lv:['','subtile','montée','sommet']},
+ v:{name:'Chant',w:1.5,c:'#D96BB0',lv:['','ad-libs','couplet','lead + doublures']},
+ c:{name:'Chœurs',w:1.2,c:'#B07ACC',lv:['','oohs','chœurs','chœur complet']},
+ f:{name:'FX',w:.5,c:'#8A939B',lv:['','texture','riser','sweep / impact']}
+};
+const ORDER='ksdpbrailvcf'.split('');
+const GROUPS=[['Batterie','ksdp'],['Musique','brali'],['Voix','vc'],['Extras','f']];
+const DEF_HINT={k:'Kick',s:'Snare ou clap',d:'Hats, ride, cymbales',p:'Congas, shakers',f:'Risers, sweeps'};
+const SEC={intro:{n:'Intro',c:'#6E7B8F'},groove:{n:'Groove',c:'#3A8FB7'},verse:{n:'Couplet',c:'#3B6FD0'},pre:{n:'Pré-refrain',c:'#2AA198'},chorus:{n:'Refrain',c:'#46A84A'},drop:{n:'Drop',c:'#E0533D'},build:{n:'Montée',c:'#E8913A'},break:{n:'Break',c:'#8E6CC6'},bridge:{n:'Pont',c:'#A55EC0'},solo:{n:'Solo',c:'#1C9C9C'},vamp:{n:'Vamp',c:'#3A8FB7'},outro:{n:'Outro',c:'#6E7B8F'}};
+const FMTS=[['radio','Radio','~3 min'],['standard','Standard','~4–5 min'],['extended','Extended','~6–7 min']];
+
+/* Couleurs facultatives : ajustent BPM, instruments suggérés et idées, pas la structure */
+const FLAV={
+ french:{n:'French Touch',fam:'house',bpm:122,h:{r:'Sample disco filtré',a:'Cordes / nappe',l:'Vocoder / hook synthé',i:'Phaser, couche filtrée',b:'Basse funky',v:'Voix vocodée',c:'Chops vocaux',k:'Punchy, source du sidechain'},ideas:[
+  ['drop','Ouvre le passe-bas lentement sur tout le premier drop au lieu de tout ouvrir d’un coup.'],
+  ['break','Le loop seul avec beaucoup de phaser, puis une mesure de silence total avant le drop.'],
+  ['drop','8 dernières mesures : pousse plus fort le pompage du sidechain sur le sample.'],
+  ['groove','Redécoupe le sample en tranches d’un temps et réarrange-les pour la seconde moitié.'],
+  ['outro','Termine sur le sample brut, non filtré, sans batterie, comme une fin de vinyle.'],
+  ['build','Faux drop : le kick revient une mesure, on recoupe, puis le vrai drop.']]},
+ garage:{n:'Garage House',fam:'house',bpm:123,h:{r:'Accords orgue / piano',a:'Nappe',l:'Riff synthé',i:'Montées d’orgue',b:'Basse profonde',v:'Lead soulful',c:'Chœurs'},ideas:[
+  ['break','Break dub : batterie coupée, phrases vocales qui résonnent dans un long delay.'],
+  ['verse','Couplet 2 : une basse à l’orgue remplace la basse synthé.'],
+  ['chorus','Dernier refrain : ad-libs du lead par-dessus les chœurs, sans nouvelles paroles.'],
+  ['intro','Ouvre avec le hook vocal a cappella sur le kick.'],
+  ['groove','Groove instrumental avec des stabs d’orgue qui répondent au chant.']]},
+ deep:{n:'Deep House',fam:'house',bpm:120,h:{r:'Stabs orgue / Rhodes',a:'Nappe chaude',l:'Chop vocal / lead feutré',i:'Delays dub sur l’accord',b:'Sub rond',v:'Voix soulful',c:'Nappes vocales'},ideas:[
+  ['intro','32 mesures de kick, hats et percus seuls avant le premier accord.'],
+  ['break','Delay dub sur un seul stab d’accord, feedback qui monte, puis coupure.'],
+  ['drop','Retire le kick 8 mesures en plein milieu, basse et accords continuent.'],
+  ['groove','Une seule phrase parlée ou chantée, noyée de reverb, utilisée une fois.'],
+  ['outro','Garde seulement la nappe et les queues de delay sur les 8 dernières mesures.']]},
+ gospel:{n:'House Gospel',fam:'house',bpm:124,h:{r:'Piano gospel',a:'Orgue Hammond',l:'Riff piano',i:'Claps, montées d’orgue',b:'Basse',v:'Chant lead',c:'Chorale'},ideas:[
+  ['chorus','Refrain final : module d’un demi-ton vers le haut.'],
+  ['break','Chorale a cappella avec seulement des claps, puis le groupe revient en force.'],
+  ['verse','Intro parlée façon prêcheur avant le couplet 1.'],
+  ['chorus','Question-réponse : le lead chante une phrase, la chorale répond.'],
+  ['build','Montée d’orgue Hammond et claps qui doublent vers le refrain final.']]},
+ dhouse:{n:'Disco House',fam:'house',bpm:122,h:{r:'Chops de guitare funk',a:'Cordes disco',l:'Hook cuivres / synthé',i:'Montées de cordes',b:'Basse en octaves',v:'Sample vocal',c:'Chœurs'},ideas:[
+  ['intro','Ouvre avec la basse en octaves seule sur 4 mesures.'],
+  ['build','Trait de cordes (glissando) qui mène droit au drop.'],
+  ['drop','Seconde moitié : boucle un extrait vocal d’une mesure par-dessus, filtré.'],
+  ['break','Batterie coupée, cordes et chops de guitare seuls, puis un fill de congas.'],
+  ['outro','Fais disparaître le groupe mais laisse les cordes sonner sur le kick.']]},
+ disco:{n:'Disco classique',fam:'disco',bpm:118,h:{r:'Guitare funk',a:'Cordes',l:'Cuivres / sax',i:'Traits de cordes',b:'Basse en octaves',v:'Chant lead',c:'Chœurs'},ideas:[
+  ['break','Break disco classique : congas et hats seuls pendant 8 mesures.'],
+  ['chorus','Dernier refrain : changement de tonalité d’un ton vers le haut.'],
+  ['pre','Glissando de cordes vers le refrain.'],
+  ['outro','Fausse fin : arrêt de deux temps, puis le groupe repart.'],
+  ['solo','Solo de sax ou de synthé qui dialogue avec les cuivres.']]},
+ boogie:{n:'Boogie / Jazz-Funk',fam:'disco',bpm:112,h:{r:'Clavinet / Rhodes',a:'Nappe synthé',l:'Lead synthé / sax',i:'Stabs cuivres',b:'Basse slap / synthé',v:'Voix / vocoder',c:'Chœurs'},ideas:[
+  ['break','Break avec solo de basse synthé, seulement kick et claps.'],
+  ['chorus','Le vocoder double le hook du refrain.'],
+  ['bridge','Réharmonisation jazzy : accords enrichis sur 8 mesures.'],
+  ['solo','Talk-box ou lead synthé sur un groove de clavinet.'],
+  ['intro','Accords de Rhodes en tempo libre, puis la batterie compte l’entrée.']]},
+ neosoul:{n:'Néo-Soul',fam:'soul',bpm:88,h:{r:'Rhodes / guitare',a:'Nappe / cordes',l:'Lick de clavier',i:'Cuivres',b:'Basse en retrait',v:'Chant lead',c:'Harmonies'},ideas:[
+  ['verse','Couplet 2 : pas de batterie sur la première moitié, juste clavier, basse et voix.'],
+  ['chorus','Dernier refrain : réharmonise avec des accords plus riches (maj9, 11).'],
+  ['vamp','Le vamp final module dans une nouvelle tonalité pour les ad-libs.'],
+  ['intro','Place la batterie légèrement derrière le temps pour un groove nonchalant.'],
+  ['bridge','Effet tape-stop à la fin du pont, juste avant le refrain.']]},
+ rnb:{n:'R&B',fam:'soul',bpm:92,h:{r:'Claviers / guitare',a:'Nappe',l:'Synthé / chop vocal',i:'Fills 808, risers',b:'Sub / 808',v:'Chant lead',c:'Voix empilées'},ideas:[
+  ['bridge','Passe en half-time sur le pont.'],
+  ['outro','Beat switch sur l’outro : nouveau pattern de batterie, mêmes accords.'],
+  ['pre','Pré-refrain a cappella avec harmonies empilées.'],
+  ['chorus','Empilements d’ad-libs seulement sur le dernier refrain.'],
+  ['verse','Couplet 2 : change le pattern de batterie (placement du kick).']]}
+};
+
+/* Styles = familles qui partagent les mêmes structures */
+const FAM={
+ house:{n:'House',bpm:123,h:{r:'Stabs piano / orgue, sample',a:'Cordes / nappe',l:'Hook synthé',i:'Stabs cuivres, filtre',b:'Basse',v:'Chant / hook vocal',c:'Chœurs'},ideas:[
+  ['break','Break piano : seulement les accords de piano, puis le clap revient seul.'],
+  ['build','Roulement de snare old-school qui double de vitesse toutes les 2 mesures.'],
+  ['drop','4 dernières mesures du drop final : kick coupé, tout le reste dedans.'],
+  ['groove','Question-réponse entre le stab et un court hook vocal.'],
+  ['intro','Commence avec le hook joué par un seul instrument filtré.'],
+  ['chorus','Dernier refrain : le chant seul sur le kick pendant 4 mesures, puis tout revient.']]},
+ disco:{n:'Disco / Funk',bpm:116,h:{r:'Guitare funk, clavinet',a:'Cordes',l:'Cuivres / sax / synthé',i:'Traits de cordes, cuivres',b:'Basse en octaves / slap',v:'Chant lead',c:'Chœurs'},ideas:[
+  ['break','Break classique : congas et hats seuls pendant 8 mesures.'],
+  ['chorus','Dernier refrain : changement de tonalité d’un ton vers le haut.'],
+  ['solo','Solo qui dialogue avec les cuivres.'],
+  ['outro','Fausse fin : arrêt de deux temps, puis le groupe repart.'],
+  ['groove','Coupe tout sauf basse et batterie pendant 4 mesures au milieu du groove.']]},
+ soul:{n:'Soul / R&B',bpm:90,h:{r:'Rhodes / guitare',a:'Nappe / cordes',l:'Lick de clavier / synthé',i:'Cuivres, risers',b:'Basse',v:'Chant lead',c:'Harmonies'},ideas:[
+  ['bridge','Passe en half-time sur le pont.'],
+  ['chorus','Dernier refrain : réharmonise avec des accords plus riches (maj9, 11).'],
+  ['verse','Couplet 2 : pas de batterie sur la première moitié.'],
+  ['bridge','Effet tape-stop à la fin du pont, juste avant le refrain.'],
+  ['outro','Beat switch sur l’outro : nouveau pattern de batterie, mêmes accords.']]}
+};
+/* Structures types. Préfixes : + = Extended seulement, ~ = pas en Radio, ! = Radio seulement. v:1 = demande du chant. */
+const TPL={
+ house:[
+  {n:'Classique club',s:'intro16 groove16 build8 drop32 break16 build8 drop32 +groove16 outro16'},
+  {n:'Drop tôt',s:'intro8 drop16 break8 groove16 build8 drop32 ~break16 ~build8 ~drop16 outro16'},
+  {n:'Montée progressive',s:'intro32 groove32 ~break16 build16 drop32 +break16 +drop16 groove16 outro32'},
+  {n:'Faux drop',s:'intro16 groove16 build8 drop8 break8 build8 drop32 ~break16 ~build8 ~drop32 outro16'},
+  {n:'Groove continu',s:'intro16 groove32 break8 groove32 ~break16 ~groove32 outro16'},
+  {n:'Grand break central',s:'intro16 groove16 drop32 break32 build8 drop32 +groove16 outro16'},
+  {n:'Couplet / refrain',v:1,s:'intro16 verse16 ~pre8 chorus16 verse16 ~pre8 chorus16 break16 ~build8 chorus32 outro16'},
+  {n:'Refrain d’abord',v:1,s:'intro8 chorus16 verse16 chorus16 break16 ~verse16 chorus32 +groove16 outro16'},
+  {n:'Vocal dub',v:1,s:'intro16 groove16 verse16 chorus16 break16 groove16 chorus16 +break16 +chorus16 outro16'},
+  {n:'Couplet + drop',v:1,s:'intro16 verse16 build8 drop16 verse16 build8 drop32 ~break16 ~drop16 outro16'}
+ ],
+ disco:[
+  {n:'Classique disco',v:1,s:'intro8 verse16 ~pre8 chorus16 verse16 ~pre8 chorus16 !bridge8 ~break16 ~solo16 chorus16 outro16'},
+  {n:'Version DJ',v:1,s:'intro16 groove16 verse16 chorus16 verse16 chorus16 break32 build8 chorus32 outro32'},
+  {n:'Refrain d’abord',v:1,s:'intro8 chorus16 verse16 chorus16 verse16 chorus16 bridge8 +break16 +solo16 chorus16 outro8'},
+  {n:'Jam funk',v:1,s:'intro8 verse16 chorus8 verse16 chorus8 solo16 ~break16 chorus16 vamp16 outro8'},
+  {n:'Instrumental',s:'intro8 groove16 solo16 groove16 break16 ~solo16 groove16 outro16'},
+  {n:'Grooves et breaks',s:'intro16 groove16 build8 groove32 break16 build8 groove32 outro16'}
+ ],
+ soul:[
+  {n:'Classique',s:'intro8 verse16 pre4 chorus8 verse16 pre4 chorus8 bridge8 +solo16 chorus16 outro8'},
+  {n:'Refrain d’abord',s:'intro4 chorus8 verse16 chorus8 verse16 chorus8 bridge8 chorus16 outro4'},
+  {n:'Double refrain final',s:'intro8 verse16 chorus8 verse16 chorus8 ~solo8 bridge8 chorus8 chorus8 outro8'},
+  {n:'Vamp final',s:'intro8 verse16 chorus8 verse16 chorus8 bridge8 chorus8 +solo16 vamp16 ~outro8'},
+  {n:'Solo puis pont',s:'intro8 verse16 ~pre4 chorus8 verse16 ~pre4 chorus8 ~solo8 bridge8 chorus16 outro8'}
+ ]
+};
+const MIG={french:['house','french'],garage:['house','garage'],deep:['house','deep'],gospel:['house','gospel'],dhouse:['house','dhouse'],boogie:['disco','boogie'],neosoul:['soul','neosoul'],rnb:['soul','rnb']};
+const TARGET={radio:3.25,standard:4.5,extended:6.5}, TARGET_SOUL={radio:3.25,standard:4,extended:5.5};
+const PRI={house:['groove','outro','intro','drop','verse','chorus','break'],disco:['groove','outro','break','intro','verse','chorus','solo'],soul:['vamp','outro','verse','chorus','solo','intro']};
+
+/* Recettes : phrase = [taille, niveaux, note, montée]. taille '*'=poids 1, '*2'=poids 2, '=n'=n mesures fixes.
+   lettres : k kick s snare d batterie p percus b basse r rythmique a nappe l lead i intensité v chant c chœurs f fx (0-3). */
+const R={
+ house:{
+  intro:[
+   [['*','k3d1','Kick et hats fermés seuls, idéal pour le DJ'],['*','k3s2d1p1','Le clap et les percus arrivent'],['*','k3s2d2p1b1r1f1','La basse et le loop filtré s’installent',1]],
+   [['=1','r2','Loop seul, gros passe-bas'],['=1','r2s2','Le clap entre'],['*','k3s2d1r2','Le kick entre, filtre toujours fermé'],['*','k3s2d2p1b1r2f1','Les hats s’ouvrent, le filtre monte',1]],
+   [['*','a2f1','Nappe et texture, sans batterie'],['*','k2d1a2','Kick doux sous la nappe'],['*','k3s2d2p1a1r1','Le groove se met en place']]
+  ],
+  groove:[
+   [['*','k3s3d2p1b2r2','Groove complet, basse en retrait'],['*','k3s3d2p2b3r2a1','Basse plus chargée, couche de percus en plus']],
+   {n:'v',p:[['*','k3s2d2b2r1v2','Épuré sous le chant'],['*','k3s3d2p1b2r2a1v2','Les accords s’étoffent']]},
+   [['*','k3s3d2b2r2','Groove'],['=2','k3s3b2r2','Les hats sautent : respiration'],['*','k3s3d3p2b3r2l1','Retour, le lead annonce le hook']]
+  ],
+  build:[
+   [['*','s2d1r2a1i2f2','Kick coupé, roulement de snare qui monte',1],['=1','i3f3','Sweep : dernière mesure avant le drop',1]],
+   [['*','k3s2d2b1r2i2f2','Sweep de filtre sur tout',1],['=1','r1f3','Coupure : juste une queue de reverb']],
+   [['*','k2d1a2l1i1f1','Demi-énergie : nappe et esquisse de lead'],['*','k3s3d2r2i2f2','Le roulement de snare arrive',1]]
+  ],
+  drop:[
+   [['*','k3s3d3p2b3r3l3i2v3c1','Hook principal, énergie maximale'],['*','k3s3d3p2b3r3l3i3a1v3c2','Une couche en plus (cordes / cuivres)']],
+   [['*','k3s3d3p2b3r3l2v3','Hook'],['=2','k3s3d3b3r3l3i3f2','Fill / transition'],['*','k3s3d3p3b3r3l3a2v3c2','Sommet : tout est dedans']],
+   [['*','k3s3d3p1b3r3l3v3','Hook, filtre grand ouvert'],['*','k3s3d3p2b3r2l3i3v3','Le sidechain pompe plus fort, couche d’intensité']]
+  ],
+  break:[
+   [['*','a3l1r1v1c1f1','Batterie coupée : nappes et chops vocaux'],['*','a3l2r1s1v2c2','Le clap revient doucement',1]],
+   [['*','r2a2','Loop seul, le filtre se referme'],['*','r2a2b1i1f1','Esquisse de basse, la tension monte',1]],
+   {n:'v',p:[['*','a2v3c2','Moment vocal, presque a cappella'],['*','a2r1l1s1v2','Les éléments reviennent peu à peu',1]]}
+  ],
+  outro:[
+   [['*','k3s3d2p1b2r2','Le groove continue'],['*','k3s2d1b1r1','On épure'],['*','k3d1','Kick et hats seuls, idéal pour le DJ']],
+   [['*','k3s2d2r2a1','Le filtre se referme lentement'],['*','r1a2f1','Le loop s’efface, sans batterie']]
+  ],
+  verse:[
+   [['*','k3s3d1b1r2a1v3','Couplet : hats légers, basse en notes tenues'],['*','k3s3d2p1b2r2a1v3','Deuxième moitié : la basse groove, les hats s’ouvrent']],
+   [['=2','k3r2v3','Chant sur kick et accords'],['*','k3s3d2b2r2v3','Le groove s’étoffe'],['*','k3s3d2p1b2r2a1v3c1','Les chœurs répondent']]
+  ],
+  pre:[
+   [['*','k3s3d2b2r2a2i2v3c1','Les nappes enflent, la tension monte',1]],
+   [['*','k1s2d1b1a2i2v3f1','Le kick saute, la snare monte',1]]
+  ],
+  chorus:[
+   [['*','k3s3d3p2b3r3a1l2v3c3','Refrain : batterie complète, les chœurs répondent'],['*','k3s3d3p2b3r3a2l3i2v3c3','Deuxième passage : couche d’intensité en plus']],
+   [['*','k3s3d3p1b3r3v3c2','Refrain'],['=2','k3s3d3b3r3i3v3c3f2','Fill de transition'],['*','k3s3d3p2b3r3a2l2v3c3','Retour, en plus gros']]
+  ]
+ },
+ disco:{
+  intro:[
+   [['=1','r2','Guitare / claviers seuls'],['=1','r2s2d1','Levée de hi-hat et snare'],['*','k3s3d2b3r2a1','Tout le groupe entre']],
+   [['=2','s2d2','Intro en break de batterie'],['*','k3s3d3b3r2','Basse et guitare se calent'],['*','k3s3d3p1b3r2a2l1','Les cordes arrivent en balayage',1]],
+   [['*','a2l2','Intro cordes / lead, sans batterie'],['*','k3s3d2b3r2a1','Le groove démarre']]
+  ],
+  groove:[
+   [['*','k3s3d3p2b3r3a1','Groove instrumental'],['*','k3s3d3p2b3r3a1l2','Riffs de lead sur le groupe']]
+  ],
+  verse:[
+   [['*','k3s3d2b2r2v3','Couplet : basse tranquille'],['*','k3s3d2p1b3r2a1v3','Basse plus chargée, les congas entrent']],
+   [['*','k3s2d1b2r2v3','Hats légers, chops de guitare'],['*','k3s3d2p1b3r3v3c1','Hats ouverts, chœurs en « oohs »']]
+  ],
+  pre:[
+   [['*','k3s3d2b3r2a2i2v3c1','Les cordes montent',1]],
+   [['*','k3s3d2b2r1a1i2v3c2f1','Les stabs de cuivres montent',1]]
+  ],
+  chorus:[
+   [['*','k3s3d3p2b3r3a3l2i2v3c3','Refrain : cordes et chœurs, hats ouverts en doubles croches'],['*','k3s3d3p2b3r3a3l3i3v3c3','Coups de cuivres par-dessus']],
+   [['*','k3s3d3p2b3r3a2v3c3','Refrain'],['=1','s3d3i3f2','Fill de batterie'],['*','k3s3d3p2b3r3a3l3i2v3c3','Deuxième passage, plus gros']]
+  ],
+  break:[
+   [['*','k3d2p3','Break disco : kick, hats, congas'],['*','k3s3d2p3b3','La basse revient'],['*','k3s3d3p2b3r2a1i1','Guitare et cordes reviennent',1]],
+   [['*','p2r2a2','Batterie coupée : percus et claviers'],['*','k3p2b2r2a2','Le kick revient']]
+  ],
+  build:[
+   [['*','k3s3d2b3r2a2i2f2','Les cordes montent, fills de snare',1]]
+  ],
+  solo:[
+   [['*','k3s3d3p1b3r2a1l3','Solo (sax / synthé / guitare) sur le groove'],['*','k3s3d3p2b3r3a2l3i2c1','Le groupe pousse plus fort']]
+  ],
+  bridge:[
+   [['*','k2s2d1b2r1a3l1v2','Pont : nouveaux accords, plus léger'],['*','k3s3d2b2r2a3v3c2i1','Ça remonte',1]]
+  ],
+  outro:[
+   [['*','k3s3d3p2b3r3a2v1c3','Vamp du refrain, ad-libs'],['*','k3s3d2b3r2a1','On allège'],['*','k3d1p1','Batterie et percus seules']],
+   [['*','k3s3d2b3r2a2c2','Le groove continue'],['*','r2a2l1','Le groupe s’arrête, guitare et cordes résonnent']]
+  ]
+ },
+ soul:{
+  intro:[
+   [['=1','r2','Clavier seul (Rhodes)'],['=1','r2s1','Le rimshot / clap entre'],['*','k2s2d1b1r2','La batterie s’installe en retrait, esquisse de basse']],
+   [['*','r1a2v1','Clavier et ad-libs vocaux, sans batterie'],['=2','k2s2d1r2a1','La batterie arrive']],
+   [['*','k2s2d2r2','Boucle de batterie et clavier, son poussiéreux']]
+  ],
+  verse:[
+   [['*','k2s2d1b1r2v3','Couplet : basse discrète, notes tenues'],['*','k3s3d2b2r2v3','La basse entre davantage']],
+   [['*','k2s2d1b2r1v3','Épuré : batterie, basse, voix'],['*','k2s2d2p1b2r2a1v3c1','Clavier et chœurs complètent']],
+   [['*','k2s2d2b2r2v3','Groove posé'],['=2','k2s2d1b2r2v3','La batterie s’allège un instant'],['*','k3s3d2p1b2r2a1v3','Retour, couche de percus']]
+  ],
+  pre:[
+   [['*','k2s2d2b2r2a2v3c1i1','Les accords bougent, la nappe enfle',1]],
+   [['*','k1s1d1b1r2a2v3','Batterie divisée par deux : de l’espace avant le hook',1]]
+  ],
+  chorus:[
+   [['*','k3s3d3p1b3r2a2l1v3c3','Refrain : batterie complète, harmonies']],
+   [['*','k3s3d3b3r2a1v3c2','Refrain'],['*','k3s3d3p1b3r3a2l2v3c3','Doublures et harmonies s’empilent']]
+  ],
+  bridge:[
+   [['*','k1s1d1b2r1a3v3','Pont : nouveaux accords, batterie légère'],['*','k2s2d2b2r2a3v3c2i2','Ça remonte',1]],
+   [['*','r2a2v3c2','Batterie coupée : clavier et voix'],['*','k2s2d2b2r2a2v3','La batterie revient']]
+  ],
+  solo:[
+   [['*','k2s2d2b2r2a1l3','Solo : clavier / guitare / sax sur la grille'],['*','k3s3d2b3r2a2l3c1','Le groupe répond']]
+  ],
+  vamp:[
+   [['*','k3s3d2b3r2a1v1l2c2','Vamp : boucle de deux accords, ad-libs'],['*','k3s3d3p1b3r2a2v2l2c3','Ad-libs et harmonies s’empilent']]
+  ],
+  outro:[
+   [['*','k2s2d1b2r2a1v1','On allège, ad-libs'],['*','r2a1','Clavier seul, sensation de ralenti']],
+   [['*','k2s2d2b2r2a1c2','Le groove s’efface'],['*','r1a2','Queue de nappe']]
+  ]
+ }
+};
+
+/* ============ MOTEUR ============ */
+function hash(...a){let h=2166136261>>>0;const s=a.join('|');for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}h^=h>>>15;h=Math.imul(h,2246822507)>>>0;h^=h>>>13;return (h>>>0)/4294967296;}
+function lvParse(str){const o={};str.replace(/([a-z])(\d)/g,(m,e,n)=>{o[e]=+n;return m;});return o;}
+function recipe(fam,type){return (R[fam]&&R[fam][type])||R.house[type]||R.disco[type]||R.soul[type];}
+
+function alloc(spec,N){
+ let it=spec.map(p=>({fx:p[0][0]==='='?+p[0].slice(1):0,w:p[0][0]==='*'?(+p[0].slice(1)||1):0,lv:p[1],note:p[2]||'',up:!!p[3]}));
+ const sumF=()=>it.reduce((a,i)=>a+i.fx,0),flex=()=>it.filter(i=>!i.fx);
+ while(it.length>1){const R=N-sumF(),fl=flex().length;if(R>=0&&R>=fl)break;const k=it.findIndex(i=>i.fx);it.splice(k>=0?k:0,1);}
+ if(it.length===1){it[0].bars=N;}
+ else{
+  const F=sumF(),Rm=N-F,fl=flex();
+  it.forEach(i=>{if(i.fx)i.bars=i.fx;});
+  if(fl.length){
+   const u=Rm>=4*fl.length?4:Rm>=2*fl.length?2:1,units=Math.floor(Rm/u),W=fl.reduce((a,i)=>a+i.w,0);
+   fl.forEach(i=>i.un=Math.max(1,Math.floor(units*i.w/W)));
+   let s=fl.reduce((a,i)=>a+i.un,0),j=fl.length-1;
+   while(s<units){fl[j].un++;s++;j=(j-1+fl.length)%fl.length;}
+   while(s>units){const m=fl.reduce((a,i)=>i.un>a.un?i:a);m.un--;s--;}
+   fl.forEach(i=>i.bars=i.un*u);fl[fl.length-1].bars+=Rm-units*u;
+  }else it[it.length-1].bars+=Rm;
+ }
+ return it.filter(i=>i.bars>0).map(i=>({bars:i.bars,lv:lvParse(i.lv),note:i.note,up:i.up}));
+}
+
+function phrasesOf(song,s){
+ const vars=recipe(song.style,s.type);
+ let avail=vars.map((v,i)=>i).filter(i=>{const n=vars[i].n;return !n||[...n].every(e=>song.el[e]);});
+ if(!avail.length)avail=[0];
+ let vi=avail[Math.floor(hash(song.seed,s.type,0)*avail.length)];
+ for(let j=1;j<=s.k;j++)if(hash(song.seed,s.type,j,'c')>0.6)vi=avail[Math.floor(hash(song.seed,s.type,j)*avail.length)];
+ const v=vars[vi],ph=alloc(v.p||v,s.bars);
+ ph.forEach(p=>{for(const e in p.lv)if(!song.el[e]||!EL[e])delete p.lv[e];});
+ return ph;
+}
+
+function loopTypeOf(fam,t,seq){
+ const map={main:['drop','chorus'],verse:fam==='house'?['groove','verse']:['verse','groove'],break:['break','bridge']};
+ const c=map[t];if(!c)return null;return c.find(x=>seq.some(s=>s.type===x))||null;
+}
+function parseSeq(str,fmt){
+ return str.split(' ').filter(t=>{const c=t[0];if(c==='+')return fmt==='extended';if(c==='~')return fmt!=='radio';if(c==='!')return fmt==='radio';return true;})
+  .map(t=>{const m=t.match(/([a-z]+)(\d+)/);return {type:m[1],bars:+m[2],o:+m[2]};});
+}
+function poolOf(song){
+ let p=TPL[song.style].filter(t=>!t.v||song.el.v);if(!p.length)p=TPL[song.style];
+ if(song.loop&&song.loop.type!=='none'){const q=p.filter(t=>loopTypeOf(song.style,song.loop.type,parseSeq(t.s,'extended')));if(q.length)p=q;}
+ return p;
+}
+function tplOf(song){const p=poolOf(song);return p[Math.floor(hash(song.seed,'tpl')*p.length)];}
+function ideasOf(song){return (song.flavor&&FLAV[song.flavor]?FLAV[song.flavor].ideas:[]).concat(FAM[song.style].ideas);}
+function hintOf(song,e){const f=song.flavor&&FLAV[song.flavor];return (f&&f.h[e])||FAM[song.style].h[e]||DEF_HINT[e]||'';}
+function titleOf(song){return FAM[song.style].n+(song.flavor&&FLAV[song.flavor]?' · '+FLAV[song.flavor].n:'');}
+function migrate(x){if(x&&!FAM[x.style]&&MIG[x.style]){const m=MIG[x.style];x.style=m[0];x.flavor=m[1];if(x.versions)x.versions={};}if(x&&x.style==='vocalhouse')x.style='house';return x;}
+
+function buildVersion(song,fmt){
+ const fam=song.style;
+ const seq=parseSeq(tplOf(song).s,fmt);
+ const target=Math.round((fam==='soul'?TARGET_SOUL:TARGET)[fmt]*song.bpm/4);
+ const step=fam==='soul'?4:8,min=fam==='soul'?4:8;
+ // on rallonge surtout grooves / intro / outro ; on ne raccourcit jamais couplets, refrains ni drops (la durée reste une estimation)
+ const pick=list=>{const c=[];list.forEach(t=>seq.forEach((s,i)=>{if(s.type===t)c.push(i);}));return c;};
+ const grow=pick(PRI[fam]),shrink=pick(['intro','outro','break','groove','vamp','solo']);
+ let total=seq.reduce((a,s)=>a+s.bars,0),gi=Math.floor(hash(song.seed,'ci')*Math.max(1,grow.length)),si=0,guard=0,fails=0;
+ while(guard++<80){
+  const diff=target-total;
+  if(diff>0){if(diff<=step/2||!grow.length)break;const idx=grow[gi++%grow.length];seq[idx].bars+=step;total+=step;}
+  else{if(total<=target*1.12||!shrink.length||fails>shrink.length)break;const idx=shrink[si++%shrink.length];
+   if(seq[idx].bars-step>=Math.max(min,seq[idx].o/2)){seq[idx].bars-=step;total-=step;fails=0;}else fails++;}
+ }
+ const lt=song.loop&&song.loop.type!=='none'?loopTypeOf(fam,song.loop.type,seq):null;
+ if(lt){const L=song.loop.len;seq.forEach(s=>{if(s.type===lt){s.loop=true;s.bars=Math.max(L,Math.round(s.bars/L)*L);}});}
+ const cnt={};seq.forEach(s=>{delete s.o;s.k=cnt[s.type]=(cnt[s.type]===undefined?0:cnt[s.type]+1);});
+ return {sections:seq};
+}
+
+function timeline(song,ver){
+ let start=0;
+ const secs=ver.sections.map((s,i)=>{const ph=phrasesOf(song,s);let b=start;ph.forEach(p=>{p.start=b;b+=p.bars;});const o=Object.assign({},s,{i,start,phrases:ph});start+=s.bars;return o;});
+ const tot={},cnt={};secs.forEach(s=>tot[s.type]=(tot[s.type]||0)+1);
+ secs.forEach(s=>{cnt[s.type]=(cnt[s.type]||0)+1;s.name=SEC[s.type].n+(tot[s.type]>1?' '+cnt[s.type]:'');});
+ const W=ORDER.filter(e=>song.el[e]).reduce((a,e)=>a+EL[e].w,0)||1;
+ const energy=[],barInfo=[];
+ secs.forEach(s=>s.phrases.forEach((p,pi)=>{
+  let e=0;for(const k in p.lv)e+=EL[k].w*p.lv[k]/3;e/=W;
+  for(let j=0;j<p.bars;j++){let v=e;if(p.up)v=e*(0.55+0.45*(p.bars>1?j/(p.bars-1):1));energy.push(Math.min(1,v));barInfo.push({s:s.i,p:pi});}
+ }));
+ const n={radio:1,standard:2,extended:3}[song.fmt]||2;
+ ideasOf(song).map((x,i)=>({t:x[0],x:x[1],r:hash(song.seed,'idea',song.fmt,i)}))
+  .filter(o=>secs.some(s=>s.type===o.t)).sort((a,b)=>a.r-b.r).slice(0,n)
+  .forEach(o=>{const c=secs.filter(s=>s.type===o.t);const s=c[Math.floor(hash(song.seed,'occ',o.t)*c.length)];(s.ideas=s.ideas||[]).push(o.x);});
+ return {secs,total:start,energy,barInfo};
+}
+
+/* ============ INTERFACE ============ */
+const HDW=92,BWMIN=1.2,BWMAX=48;
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtT=sec=>{sec=Math.round(sec);return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0');};
+const rgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`;};
+const clone=o=>JSON.parse(JSON.stringify(o));
+const barsTxt=n=>n+(n>1?' mesures':' mesure');
+
+const defEl={};ORDER.forEach(e=>defEl[e]=e!=='f');
+const S={view:'setup',params:Object.assign({style:'house',flavor:'',bpm:123,fmt:'standard',el:defEl,loop:{type:'none',len:16}},store.get('arc.params',{})),song:store.get('arc.current',null),mode:'simple',bw:store.get('arc.bw',12),sel:{sec:0,bar:0},T:null,pinchAt:0};
+migrate(S.params);if(!FAM[S.params.style]){S.params.style='house';S.params.flavor='';}if(S.params.flavor===null)S.params.flavor='';
+migrate(S.song);if(S.song&&S.song.versions&&FAM[S.song.style])S.view='arrange';else S.song=null;
+
+function $(s){return document.querySelector(s);}
+function persist(){store.set('arc.params',S.params);store.set('arc.current',S.song);}
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.remove(),300);},1400);}
+function curVer(){const s=S.song;if(!s.versions[s.fmt])s.versions[s.fmt]=buildVersion(s,s.fmt);return s.versions[s.fmt];}
+function loopLabels(fam){return {main:fam==='house'?'Drop / Refrain':'Refrain',verse:fam==='house'?'Groove / Couplet':'Couplet',break:fam==='soul'?'Pont':'Break'};}
+
+/* Zoom : toutes les positions de la grille sont en calc(var(--bw) * n), donc zoomer = changer une variable */
+function applyBw(grid){
+ grid.style.setProperty('--bw',S.bw+'px');
+ grid.classList.toggle('z-mid',S.bw<9&&S.bw>=4.5);
+ grid.classList.toggle('z-lo',S.bw<4.5);
+ grid.classList.toggle('nolbl',S.bw<11);
+}
+function setBw(bw,anchorBar,mx){
+ const grid=$('#grid');if(!grid)return;
+ S.bw=Math.max(BWMIN,Math.min(BWMAX,bw));
+ applyBw(grid);
+ grid.scrollLeft=Math.max(0,anchorBar*S.bw+HDW-mx);
+}
+function centerAnchor(grid){const mx=HDW+(grid.clientWidth-HDW)/2;return {mx,bar:(grid.scrollLeft+mx-HDW)/S.bw};}
+function attachPinch(grid){
+ let pz=null;
+ const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
+ grid.addEventListener('touchstart',e=>{
+  if(e.touches.length===2){const r=grid.getBoundingClientRect(),mx=(e.touches[0].clientX+e.touches[1].clientX)/2-r.left;
+   pz={d0:dist(e.touches),bw0:S.bw,mx,bar:(grid.scrollLeft+mx-HDW)/S.bw};e.preventDefault();}
+ },{passive:false});
+ grid.addEventListener('touchmove',e=>{
+  if(pz&&e.touches.length===2){e.preventDefault();setBw(pz.bw0*dist(e.touches)/pz.d0,pz.bar,pz.mx);}
+ },{passive:false});
+ const end=e=>{if(pz&&e.touches.length<2){pz=null;S.pinchAt=Date.now();store.set('arc.bw',S.bw);}};
+ grid.addEventListener('touchend',end);grid.addEventListener('touchcancel',end);
+ grid.addEventListener('gesturestart',e=>e.preventDefault());
+ grid.addEventListener('gesturechange',e=>e.preventDefault());
+ // trackpad / ctrl + molette sur ordinateur
+ grid.addEventListener('wheel',e=>{if(!e.ctrlKey)return;e.preventDefault();const r=grid.getBoundingClientRect(),mx=e.clientX-r.left;setBw(S.bw*Math.exp(-e.deltaY*0.01),(grid.scrollLeft+mx-HDW)/S.bw,mx);store.set('arc.bw',S.bw);},{passive:false});
+}
+
+function render(){
+ const hb=$('#hbtns');
+ if(S.view==='arrange')hb.innerHTML=`<button class="hbtn" data-act="saved">Sauvegardes</button>`;
+ else if(S.view==='saved')hb.innerHTML=(S.song?`<button class="hbtn" data-act="back">Morceau</button>`:'')+`<button class="hbtn" data-act="setup">Nouveau</button>`;
+ else hb.innerHTML=(S.song?`<button class="hbtn" data-act="back">Morceau</button>`:'')+`<button class="hbtn" data-act="saved">Sauvegardes</button>`;
+ if(S.view==='setup')renderSetup();else if(S.view==='saved')renderSaved();else renderArrange();
+}
+
+function renderSetup(){
+ const P=S.params,fam=P.style,LL=loopLabels(fam);
+ $('#view').innerHTML=`
+ <section class="card"><h3>Style</h3><div class="chips">${Object.entries(FAM).map(([k,s])=>`<button class="chip ${P.style===k?'on':''}" data-act="style" data-v="${k}">${s.n}</button>`).join('')}</div>
+ <p class="hint" style="margin:12px 0 6px">Couleur <span class="opt">facultatif : ajuste le BPM, les instruments suggérés et les idées 💡, pas la structure</span></p>
+ <div class="chips"><button class="chip ${!P.flavor?'on':''}" data-act="flavor" data-v="">Générale</button>${Object.entries(FLAV).filter(([k,f])=>f.fam===fam).map(([k,f])=>`<button class="chip ${P.flavor===k?'on':''}" data-act="flavor" data-v="${k}">${f.n}</button>`).join('')}</div>
+ <p class="hint">${TPL[fam].filter(t=>!t.v||P.el.v).length} structures types possibles. Chaque génération en tire une au hasard.</p></section>
+ <section class="card"><h3>Tempo</h3><div class="bpm"><button data-act="bpm" data-v="-1">−</button><input id="bpm" type="number" inputmode="numeric" value="${P.bpm}" min="60" max="200"><button data-act="bpm" data-v="1">+</button><span>BPM</span></div></section>
+ <section class="card"><h3>Version</h3><div class="seg">${FMTS.map(f=>`<button class="${P.fmt===f[0]?'on':''}" data-act="fmt" data-v="${f[0]}">${f[1]}<small>${f[2]}</small></button>`).join('')}</div><p class="hint">La durée est une cible, pas une règle. Tu pourras changer de version ensuite.</p></section>
+ <section class="card"><h3>Tes éléments</h3>${GROUPS.map(g=>`<div class="grp"><small>${g[0]}</small><div class="chips">${[...g[1]].map(e=>`<button class="chip echip ${P.el[e]?'on':''}" data-act="el" data-v="${e}"><i style="background:${EL[e].c}"></i>${EL[e].sn||EL[e].name}</button>`).join('')}</div></div>`).join('')}
+ <p class="hint">Rythmique : stabs, guitare, clavinet · Nappe : accords tenus, cordes · Lead : hooks, mélodies · Intensité : couches qui font monter la pression (cuivres, arpèges, risers).</p></section>
+ <section class="card"><h3>Loop de départ <span class="opt">facultatif</span></h3><p class="hint" style="margin:0 0 8px">Tu as déjà un loop de 8 ou 16 mesures ? Dis quelle partie c’est, et le morceau se construit autour.</p>
+ <div class="seg">${[['none','Aucun'],['main',LL.main],['verse',LL.verse],['break',LL.break]].map(o=>`<button class="${P.loop.type===o[0]?'on':''}" data-act="loop" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>
+ ${P.loop.type!=='none'?`<div class="seg">${[8,16].map(n=>`<button class="${P.loop.len===n?'on':''}" data-act="looplen" data-v="${n}">${n} mesures</button>`).join('')}</div>`:''}</section>
+ <button class="primary" data-act="generate">Générer</button>`;
+ $('#bpm').addEventListener('change',e=>{P.bpm=Math.max(60,Math.min(200,Math.round(+e.target.value||P.bpm)));e.target.value=P.bpm;persist();});
+}
+
+function renderSaved(){
+ const L=store.get('arc.saved',[]);
+ $('#view').innerHTML=`<div class="wrap"><h2 class="vt">Structures sauvegardées</h2>${L.length?L.map(x=>`<div class="item"><button class="iopen" data-act="open" data-v="${x.id}"><b>${esc(x.name)}</b><small>${esc(FAM[migrate(x.song).style]?titleOf(x.song):'')} · ${x.song.bpm} BPM · ${new Date(x.date).toLocaleDateString('fr-FR')}</small></button><button class="idel" data-act="del" data-v="${x.id}" aria-label="Supprimer">✕</button></div>`).join(''):'<p class="empty">Rien de sauvegardé pour l’instant.<br>Génère une structure, puis touche Sauver.</p>'}</div>`;
+}
+
+function diffTags(prev,p,el){
+ const out=[];
+ ORDER.forEach(e=>{if(!el[e])return;const a=prev?(prev.lv[e]||0):0,b=p.lv[e]||0;if(a===b)return;
+  const t=!a?'+ '+EL[e].name:!b?'− '+EL[e].name:(b>a?'↑ ':'↓ ')+EL[e].name;
+  out.push(`<span class="tag"><i style="background:${EL[e].c}"></i>${t}${b?' · '+EL[e].lv[b]:''}</span>`);});
+ return out.join('')||'<span class="tag">pas de changement</span>';
+}
+
+function renderArrange(){
+ const old=$('#grid'),oldLeft=old?old.scrollLeft:0;
+ const song=S.song,ver=curVer(),T=S.T=timeline(song,ver),tpl=tplOf(song);
+ if(S.sel.sec>=T.secs.length)S.sel.sec=0;
+ S.sel.bar=Math.min(S.sel.bar,T.total-1);
+ let sel=T.secs[S.sel.sec];
+ if(S.sel.bar<sel.start||S.sel.bar>=sel.start+sel.bars)S.sel.bar=sel.start;
+ const full=S.mode==='full',N=T.total;
+ const X=(n,px)=>`calc(var(--bw) * ${n}${px?(px>0?' + ':' - ')+Math.abs(px)+'px':''})`;
+ const row=(hd,lane,cls)=>`<div class="row ${cls}"><div class="hd">${hd}</div><div class="lane" style="width:${X(N)}">${lane}</div></div>`;
+ // règle (repères toutes les 4 mesures ; la densité s'adapte au zoom)
+ let marks='';for(let b=0;b<N;b+=4)marks+=`<span class="mk${b%8===0?' m8':''}${b%16===0?' m16':''}" style="left:${X(b)}">${b+1}</span>`;
+ let g=row('',marks,'r-ruler');
+ g+=row('<b>Sections</b>',T.secs.map(s=>`<div class="sec ${s.i===S.sel.sec?'sel':''}" style="left:${X(s.start,1)};width:${X(s.bars,-2)};background:${SEC[s.type].c}">${s.loop?'🔁 ':''}${esc(s.name)}${full&&s.ideas?' 💡':''}</div>`).join(''),'r-sec');
+ // courbe d'énergie (unités = mesures, étirée par le zoom)
+ const H=60,pts=T.energy.map((v,b)=>[b+.5,H-5-v*(H-12)]);
+ const P=p=>p[0].toFixed(2)+','+p[1].toFixed(1);
+ const line='M'+pts.map(P).join(' L');
+ const area=`M0,${H} L0,${pts[0][1].toFixed(1)} L`+pts.map(P).join(' L')+` L${N},${pts[pts.length-1][1].toFixed(1)} L${N},${H} Z`;
+ const bounds=T.secs.slice(1).map(s=>`<line x1="${s.start}" x2="${s.start}" y1="0" y2="${H}" stroke="#3a3a3e" stroke-width="1" vector-effect="non-scaling-stroke"/>`).join('');
+ const svg=`<svg viewBox="0 0 ${N} ${H}" preserveAspectRatio="none" style="display:block;width:${X(N)};height:${H}px"><defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5c542" stop-opacity=".5"/><stop offset="1" stop-color="#f5c542" stop-opacity="0"/></linearGradient></defs>${bounds}<path d="${area}" fill="url(#eg)"/><path d="${line}" fill="none" stroke="#f5c542" stroke-width="1.8" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`;
+ g+=row(`<b>Énergie</b><small>${(T.energy[S.sel.bar]*10).toFixed(1)} / 10</small>`,svg,'r-energy');
+ // pistes
+ ORDER.filter(e=>song.el[e]).forEach(e=>{
+  let regs='';
+  T.secs.forEach(s=>{let cur=null;const push=c=>{if(!c||!c.l)return;const op=full?[0,.38,.66,.95][c.l]:.88;
+    regs+=`<div class="reg" style="left:${X(c.st,1)};width:${X(c.n,-2)};background:${rgba(EL[e].c,op)}">${full?EL[e].lv[c.l]:''}</div>`;};
+   s.phrases.forEach(p=>{const l=p.lv[e]||0;if(cur&&cur.l===l)cur.n+=p.bars;else{push(cur);cur={st:p.start,n:p.bars,l};}});push(cur);});
+  const hint=hintOf(song,e);
+  g+=row(`<b><i style="background:${EL[e].c}"></i>${EL[e].name}</b>${full?`<small>${esc(hint)}</small>`:''}`,regs,'r-trk');
+ });
+ g+=`<div class="selcol" style="left:calc(${HDW}px + var(--bw) * ${sel.start});width:${X(sel.bars)}"></div><div class="playhead" style="left:calc(${HDW}px + var(--bw) * ${S.sel.bar+.5})"></div>`;
+ // panneau de détail
+ const bpm=song.bpm,t0=sel.start*240/bpm,t1=(sel.start+sel.bars)*240/bpm;
+ let det=`<div class="detail"><div class="dh"><span class="dot" style="background:${SEC[sel.type].c}"></span><b>${esc(sel.name)}</b>${sel.loop?'<span class="badge">🔁 ton loop</span>':''}</div>
+ <div class="meta">Mesures ${sel.start+1}–${sel.start+sel.bars} · ${fmtT(t0)} – ${fmtT(t1)}</div>
+ <div class="len"><button data-act="len" data-v="-1" aria-label="Raccourcir">−</button><span>${barsTxt(sel.bars)}</span><button data-act="len" data-v="1" aria-label="Rallonger">+</button></div>`;
+ if(full){
+  det+=`<div class="sub">Déroulé</div>`;
+  sel.phrases.forEach((p,pi)=>{
+   const prev=pi>0?sel.phrases[pi-1]:(sel.i>0?T.secs[sel.i-1].phrases[T.secs[sel.i-1].phrases.length-1]:null);
+   const on=S.sel.bar>=p.start&&S.sel.bar<p.start+p.bars;
+   det+=`<div class="ph ${on?'on':''}" data-act="bar" data-v="${p.start}"><div class="pr">${p.bars===1?'Mesure '+(p.start+1):'Mesures '+(p.start+1)+'–'+(p.start+p.bars)}${p.up?' <span class="up">↗ montée</span>':''}</div><div class="pn">${esc(p.note)}</div><div class="tags">${diffTags(prev,p,song.el)}</div></div>`;
+  });
+  (sel.ideas||[]).forEach(x=>det+=`<div class="idea">💡 ${esc(x)}</div>`);
+ }else{
+  const max={};sel.phrases.forEach(p=>{for(const e in p.lv)max[e]=Math.max(max[e]||0,p.lv[e]);});
+  const on=ORDER.filter(e=>max[e]);
+  det+=`<div class="sub">Présents</div><div class="tags">${on.length?on.map(e=>`<span class="tag"><i style="background:${EL[e].c}"></i>${EL[e].name}</span>`).join(''):'<span class="tag">silence</span>'}</div><p class="hint">Passe en Complet pour le détail mesure par mesure${T.secs.some(s=>s.ideas)?' et les idées 💡':''}.</p>`;
+ }
+ det+='</div>';
+ $('#view').innerHTML=`<div class="top">
+  <div class="title"><h2>${esc(titleOf(song))}</h2><button class="ib acc" data-act="save">Sauver</button></div>
+  <div class="info">${bpm} BPM · ${barsTxt(N)} · ${fmtT(N*240/bpm)}</div>
+  <div class="info">Structure : <b style="color:var(--txt)">${esc(tpl.n)}</b> · ↻ pour en tirer une autre</div>
+  <div class="tools"><div class="seg">${FMTS.map(f=>`<button class="${song.fmt===f[0]?'on':''}" data-act="ver" data-v="${f[0]}">${f[1]}</button>`).join('')}</div></div>
+  <div class="tools"><div class="seg" style="flex:0 0 auto;min-width:136px"><button class="${!full?'on':''}" data-act="mode" data-v="simple">Simple</button><button class="${full?'on':''}" data-act="mode" data-v="full">Complet</button></div>
+   <div class="zoomgrp"><button class="ib" data-act="zoom" data-v="-1" aria-label="Dézoomer">−</button><button class="ib" data-act="fit" aria-label="Tout afficher">⤢</button><button class="ib" data-act="zoom" data-v="1" aria-label="Zoomer">+</button></div>
+   <span style="flex:1"></span><button class="ib" data-act="regen" aria-label="Régénérer">↻</button><button class="ib" data-act="setup" aria-label="Paramètres">⚙︎</button></div>
+ </div>
+ <div class="grid" id="grid"><div class="gin" style="width:calc(var(--bw) * ${N} + ${HDW}px)">${g}</div></div>
+ <p class="gesture">Pince à deux doigts pour zoomer · ⤢ pour tout voir</p>${det}`;
+ const grid=$('#grid');
+ applyBw(grid);attachPinch(grid);
+ grid.scrollLeft=oldLeft;
+ if(S._fit){S._fit=false;ACT.fit();}
+ if(S._scrollTo){const x=S.sel.bar*S.bw,vw=grid.clientWidth-HDW;if(x<grid.scrollLeft||x>grid.scrollLeft+vw-20)grid.scrollLeft=Math.max(0,x-vw/3);S._scrollTo=false;}
+}
+
+function selectBar(bar,scroll){const T=S.T;bar=Math.max(0,Math.min(T.total-1,bar));S.sel.bar=bar;S.sel.sec=T.barInfo[bar].s;S._scrollTo=!!scroll;render();}
+
+function newSong(seedOnly){
+ const P=S.params;
+ if(!seedOnly){S.song={style:P.style,flavor:P.flavor||null,bpm:P.bpm,el:clone(P.el),loop:clone(P.loop),fmt:P.fmt,versions:{}};}
+ const prev=seedOnly&&S.song.seed?tplOf(S.song).n:null,pool=poolOf(S.song);
+ for(let t=0;t<20;t++){S.song.seed=Math.random().toString(36).slice(2,10);if(!prev||pool.length<2||tplOf(S.song).n!==prev)break;}
+ S.song.versions={};delete S.song.savedId;
+ S.sel={sec:0,bar:0};curVer();persist();
+}
+
+const ACT={
+ style(v){S.params.style=v;S.params.flavor='';S.params.bpm=FAM[v].bpm;persist();render();},
+ flavor(v){S.params.flavor=v;S.params.bpm=v?FLAV[v].bpm:FAM[S.params.style].bpm;persist();render();},
+ bpm(v){const P=S.params;P.bpm=Math.max(60,Math.min(200,P.bpm+ +v));$('#bpm').value=P.bpm;persist();},
+ fmt(v){S.params.fmt=v;persist();render();},
+ el(v){S.params.el[v]=!S.params.el[v];persist();render();},
+ loop(v){S.params.loop.type=v;persist();render();},
+ looplen(v){S.params.loop.len=+v;persist();render();},
+ generate(){const inp=$('#bpm');if(inp){S.params.bpm=Math.max(60,Math.min(200,Math.round(+inp.value||S.params.bpm)));}
+  if(!ORDER.some(e=>S.params.el[e])){toast('Coche au moins un élément');return;}
+  newSong(false);S.view='arrange';S._fit=true;render();window.scrollTo(0,0);},
+ regen(){newSong(true);S._fit=true;render();toast('Structure : '+tplOf(S.song).n);},
+ ver(v){S.song.fmt=v;S.sel={sec:0,bar:0};S._fit=true;persist();render();},
+ mode(v){S.mode=v;render();},
+ zoom(v){const grid=$('#grid');if(!grid)return;const a=centerAnchor(grid);setBw(S.bw*(+v>0?1.5:1/1.5),a.bar,a.mx);store.set('arc.bw',S.bw);},
+ fit(){const grid=$('#grid');if(!grid||!S.T)return;setBw((grid.clientWidth-HDW-6)/S.T.total,0,HDW);store.set('arc.bw',S.bw);},
+ len(v){const s=curVer().sections[S.sel.sec],step=s.loop?S.song.loop.len:4,nb=s.bars+(+v)*step;if(nb<step||nb>128)return;s.bars=nb;persist();render();},
+ bar(v){selectBar(+v,true);},
+ setup(){S.view='setup';render();window.scrollTo(0,0);},
+ saved(){S.view='saved';render();window.scrollTo(0,0);},
+ back(){if(S.song){S.view='arrange';render();}},
+ save(){
+  const L=store.get('arc.saved',[]),song=S.song,ent=song.savedId&&L.find(x=>x.id===song.savedId);
+  if(ent){ent.song=clone(song);ent.date=Date.now();}
+  else{const name=prompt('Nom de cette structure',`${titleOf(song)} · ${song.bpm} BPM`);if(name===null)return;
+   song.savedId=Date.now().toString(36);L.unshift({id:song.savedId,name:name.trim()||'Sans titre',date:Date.now(),song:clone(song)});}
+  store.set('arc.saved',L);persist();toast('Sauvegardé');
+ },
+ open(v){const x=store.get('arc.saved',[]).find(x=>x.id===v);if(!x)return;S.song=migrate(clone(x.song));S.song.savedId=x.id;S.sel={sec:0,bar:0};S.view='arrange';persist();render();window.scrollTo(0,0);},
+ del(v){if(!confirm('Supprimer cette structure ?'))return;store.set('arc.saved',store.get('arc.saved',[]).filter(x=>x.id!==v));if(S.song&&S.song.savedId===v)delete S.song.savedId;persist();render();}
+};
+
+document.addEventListener('click',e=>{
+ const b=e.target.closest('[data-act]');
+ if(b){const f=ACT[b.dataset.act];if(f)f(b.dataset.v,b,e);return;}
+ if(Date.now()-S.pinchAt<400)return;
+ const lane=e.target.closest('#grid .lane');
+ if(lane&&S.T){const r=lane.getBoundingClientRect();selectBar(Math.floor((e.clientX-r.left)/S.bw),false);}
+});
+render();
+</script>
+</body>
+</html>
