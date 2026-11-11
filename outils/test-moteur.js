@@ -1,7 +1,7 @@
 // Test du moteur d'Arc : node outils/test-moteur.js index.html (puis node --check outils/arc-extracted.js)
 const fs = require('fs'), vm = require('vm');
 const html = fs.readFileSync(process.argv[2], 'utf8');
-const js = html.slice(html.indexOf('<script>') + 8, html.lastIndexOf('</script>'));
+const js = html.slice(html.lastIndexOf('<script>') + 8, html.lastIndexOf('</script>'));
 fs.writeFileSync(__dirname + '/arc-extracted.js', js);
 const engine = js.slice(0, js.indexOf('/* ============ INTERFACE'));
 const ctx = {};
