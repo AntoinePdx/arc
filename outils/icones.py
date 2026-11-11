@@ -4,7 +4,7 @@
 import sys
 from PIL import Image, ImageDraw
 
-BG, FG = (0x1C, 0x1C, 0x1E), (0xF5, 0xC5, 0x42)
+BG, FG = (0x0D, 0x0D, 0x0F), (0xFF, 0xB8, 0x4D)
 P0, P1, P2, P3 = (4, 18), (7.5, 6), (16.5, 6), (20, 18)
 STROKE = 2.6
 # Le trait occupe y 9-1.3 → 18+1.3 = 7.7..19.3 : centre 13.5 → on remonte de 1.5
