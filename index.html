@@ -30,7 +30,12 @@ header{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:
 .ht small{display:block;color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
 .icb{flex:none;width:42px;height:42px;border-radius:21px;border:0;background:var(--s2);display:grid;place-items:center}
 .icb.on{color:var(--acc)}
-.vbar{order:9;flex:0 0 100%;padding-top:6px}
+.vbar{order:9;flex:0 0 100%;padding-top:8px;display:flex;align-items:center;gap:8px}
+.vbar .grow{flex:1}
+.verchip{height:34px;padding:0 10px 0 13px;border-radius:17px;border:0;background:var(--s2);display:inline-flex;align-items:center;gap:7px;font-size:13px}
+.verchip b{font-weight:600}
+.verchip span{color:var(--dim);font-variant-numeric:tabular-nums}
+.verchip svg{color:var(--faint)}
 /* onglets */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;padding:0 var(--sr) var(--sb) var(--sl);background:rgba(13,13,15,.9);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-top:1px solid var(--hair)}
 .tab{flex:1;height:var(--tab);background:none;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10.5px;font-weight:600;color:var(--faint)}
@@ -50,7 +55,8 @@ main{max-width:720px;margin:0 auto;padding:6px var(--sr) calc(var(--tab) + var(-
 .seg button small{display:block;font-size:11px;font-weight:400;color:var(--faint);margin-top:1px}
 .seg button.on small{color:var(--dim)}
 .seg.tall button{min-height:50px}
-.vbar .seg button{min-height:34px;font-size:13px}
+.seg.sm{flex:none;padding:2px;border-radius:10px}
+.seg.sm button{flex:none;min-height:30px;padding:0 13px;font-size:13px;border-radius:8px}
 .scroller{display:flex;gap:8px;overflow-x:auto;margin:12px -18px 0;padding:0 18px;scrollbar-width:none}
 .scroller::-webkit-scrollbar{display:none}
 .chip{flex:none;height:36px;padding:0 15px;border-radius:18px;border:1px solid var(--hair);background:none;color:var(--dim);font-size:14px;white-space:nowrap}
@@ -91,9 +97,73 @@ main{max-width:720px;margin:0 auto;padding:6px var(--sr) calc(var(--tab) + var(-
 .r-energy .lane,.r-energy .hd{height:42px}
 .r-trk .lane,.r-trk .hd{height:var(--rh,25px)}
 .r-trk .reg{top:calc(var(--rh,25px) * .16);bottom:calc(var(--rh,25px) * .16)}
-.reg{position:absolute;top:4px;bottom:4px;border-radius:4px}
+.reg{position:absolute;top:4px;bottom:4px;border-radius:4px;display:flex;align-items:center;padding:0 5px;font:600 10px/1 var(--round);white-space:nowrap;overflow:hidden;color:transparent}
+.grid.zlbl .reg{color:var(--tc)}
+.r-energy .hd small{margin-left:auto;font:600 11px var(--round);color:var(--acc);font-variant-numeric:tabular-nums}
 .selcol{position:absolute;top:30px;bottom:0;background:rgba(255,255,255,.045);pointer-events:none;z-index:1}
 .playhead{position:absolute;top:30px;bottom:0;width:2px;margin-left:-1px;border-radius:1px;background:var(--acc);pointer-events:none;z-index:3;box-shadow:0 0 6px rgba(255,184,77,.6)}
+/* Simple : aperçu du morceau + cartes de sections */
+.v-arrange.m-simple main{padding-bottom:calc(var(--tab) + var(--sb) + 28px)}
+.v-arrange.m-simple .toast{bottom:calc(var(--tab) + var(--sb) + 16px)}
+.ov{position:sticky;top:var(--hh,0px);z-index:10;background:rgba(13,13,15,.94);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);padding:14px calc(18px + var(--sr)) 10px calc(18px + var(--sl));border-bottom:1px solid var(--hair)}
+.ovsvg{display:block;width:100%;height:36px}
+.ovbar{display:flex;gap:2px;height:26px;margin-top:-1px}
+.ovs{border:0;min-width:3px;border-radius:3px;transition:background .2s}
+.ovs:first-child{border-radius:8px 3px 3px 8px}
+.ovs:last-child{border-radius:3px 8px 8px 3px}
+.ovs.on{box-shadow:0 0 0 1.5px var(--bg),0 0 0 3px rgba(255,255,255,.85);position:relative;z-index:1}
+.ovt{display:flex;justify-content:space-between;margin-top:7px;font:500 11px var(--round);color:var(--faint);font-variant-numeric:tabular-nums}
+.scl{max-width:720px;margin:0 auto;padding:10px calc(10px + var(--sr)) 0 calc(10px + var(--sl))}
+.sc{border-radius:18px;transition:background .2s}
+.sc.open{background:var(--s1);margin:6px 0}
+.sch{display:flex;align-items:center;gap:13px;width:100%;border:0;background:none;padding:13px 12px;text-align:left}
+.scc{width:4px;align-self:stretch;border-radius:2px;flex:none}
+.scm{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.sct{display:flex;align-items:center;gap:8px;font:700 17px/1.25 var(--round)}
+.sct>span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sct em,.sname em{flex:none;font:600 10px/1 -apple-system,sans-serif;font-style:normal;text-transform:uppercase;letter-spacing:.6px;color:var(--acc);border:1px solid rgba(255,184,77,.4);border-radius:5px;padding:3px 5px}
+.sct .idot{margin-left:0}
+.scs{font-size:13px;color:var(--dim);font-variant-numeric:tabular-nums}
+.dots{display:flex;gap:4px;margin-top:7px}
+.dots i{width:7px;height:7px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.13)}
+.dots i[style]{box-shadow:none}
+.meter{display:flex;align-items:flex-end;gap:3px;flex:none;padding-right:2px}
+.meter i{width:4px;border-radius:2px;background:var(--s3)}
+.meter i.on{background:var(--acc)}
+.scd{padding:0 16px 16px 29px;animation:fin .28s ease}
+@keyframes fin{from{opacity:0;transform:translateY(-6px)}}
+.sdl{margin:6px 0 8px;font-size:11px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:var(--faint)}
+.scd .chg+.sdl,.scd .idea+.sdl,.scd .muted+.sdl{margin-top:18px}
+.muted{margin:0;color:var(--dim);font-size:14px}
+.sph{display:grid;grid-template-columns:52px 1fr;gap:8px;padding:4px 0}
+.sph span{font:600 13px/1.5 var(--round);color:var(--faint);font-variant-numeric:tabular-nums}
+.sph p{margin:0;font-size:14px;line-height:1.5}
+.sph .up{color:var(--acc)}
+.sfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid var(--hair);color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums}
+/* Créer, mode simple : résumé des réglages experts */
+.sumrow{display:flex;align-items:center;gap:10px;width:100%;padding:14px 14px 14px 16px;border:0;border-radius:16px;background:var(--s1);text-align:left}
+.sumrow span{flex:1;min-width:0}
+.sumrow b{display:block;font:600 15px var(--round)}
+.sumrow small{display:block;color:var(--dim);font-size:13px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sumrow em{font-style:normal;color:var(--acc);font-size:13px;font-weight:600;white-space:nowrap}
+.sumrow svg{color:var(--faint)}
+/* menu qui monte du bas */
+.modal.msheet{align-items:flex-end;padding:0;animation:fade .2s ease}
+.modal.msheet.out{opacity:0;transition:opacity .2s}
+@keyframes fade{from{opacity:0}}
+.menu{width:100%;max-width:520px;background:var(--s1);border-radius:24px 24px 0 0;padding:8px 12px calc(14px + var(--sb));animation:rise .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{transform:translateY(100%)}}
+.mgrab{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.18);margin:2px auto 12px}
+.menu h4{margin:0 12px 8px;font:700 18px var(--round)}
+.mi{display:flex;align-items:center;gap:12px;width:100%;padding:13px 12px;border:0;background:none;border-radius:14px;text-align:left}
+.mi>span{flex:1;min-width:0}
+.mi b{display:block;font:600 16px var(--round)}
+.mi small{color:var(--dim);font-size:13px}
+.mi em{font:600 17px var(--round);font-style:normal;color:var(--dim);font-variant-numeric:tabular-nums}
+.mi.on{background:var(--s2)}
+.mi.on em{color:var(--txt)}
+.mi svg{color:var(--acc)}
+.mi>i{width:20px;flex:none}
 /* tiroir de section */
 .sheet{position:fixed;left:0;right:0;bottom:calc(var(--tab) + var(--sb));z-index:25;max-width:720px;margin:0 auto;background:rgba(27,27,31,.97);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:1px solid var(--hair);border-radius:20px 20px 0 0;box-shadow:0 -14px 34px rgba(0,0,0,.55);padding:0 calc(8px + var(--sr)) 6px calc(8px + var(--sl))}
 .grab{height:16px;touch-action:none}
@@ -163,7 +233,7 @@ main{max-width:720px;margin:0 auto;padding:6px var(--sr) calc(var(--tab) + var(-
  :root{--tab:44px}
  .tab{flex-direction:row;gap:6px;font-size:12px}
  header{flex-wrap:nowrap;min-height:50px;padding-top:calc(var(--st) + 5px);padding-bottom:5px}
- .vbar{order:0;flex:0 0 300px;padding:0}
+ .vbar{order:0;flex:none;padding:0}
  .v-arrange main{padding-bottom:calc(var(--tab) + var(--sb) + 84px)}
  .sheet{max-width:none}
  .open .more{max-height:calc(100vh - 190px)}
@@ -536,13 +606,12 @@ const rgba=(hex,a)=>`rgba(${rgbOf(hex).join(',')},${a})`;
 const tint=(hex,t)=>`rgb(${rgbOf(hex).map(v=>Math.round(v+(255-v)*t)).join(',')})`;
 const clone=o=>JSON.parse(JSON.stringify(o));
 const barsTxt=n=>n+(n>1?' mesures':' mesure');
-const IC={new:'M12 5v14M5 12h14',song:'M4 6h8M4 12h16M4 18h11',saved:'M7 4h10a1 1 0 0 1 1 1v15l-6-4-6 4V5a1 1 0 0 1 1-1z',regen:'M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8M21 3v5h-5',left:'M15 5l-7 7 7 7',right:'M9 5l7 7-7 7',up:'M6 15l6-6 6 6',trash:'M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3',fit:'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',minus:'M6 12h12',plus:'M12 6v12M6 12h12',idea:'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z'};
+const IC={new:'M12 5v14M5 12h14',song:'M4 6h8M4 12h16M4 18h11',saved:'M7 4h10a1 1 0 0 1 1 1v15l-6-4-6 4V5a1 1 0 0 1 1-1z',regen:'M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8M21 3v5h-5',left:'M15 5l-7 7 7 7',right:'M9 5l7 7-7 7',up:'M6 15l6-6 6 6',down:'M6 9l6 6 6-6',check:'M5 12.5l4.5 4.5L19 7',trash:'M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3',fit:'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5',minus:'M6 12h12',plus:'M12 6v12M6 12h12',idea:'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z'};
 const ic=(n,s,w,fill)=>`<svg viewBox="0 0 24 24" width="${s||22}" height="${s||22}" fill="${fill?'currentColor':'none'}" stroke="currentColor" stroke-width="${w||2}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
-const LOGO='<svg class="logo" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18C7.5 6 16.5 6 20 18" fill="none" stroke="#ffb84d" stroke-width="2.6" stroke-linecap="round"/></svg>';
-const LV_OP=[0,.3,.6,.92];
+const LV_OP=[0,.3,.6,.92],DOT_OP=[0,.4,.7,1];
 
 const defEl={};ORDER.forEach(e=>defEl[e]=e!=='f');
-const S={view:'setup',params:Object.assign({style:'house',flavor:'',bpm:123,fmt:'standard',el:defEl,loop:{type:'none',len:16}},store.get('arc.params',{})),song:store.get('arc.current',null),bw:store.get('arc.bw',12),sel:{sec:0,bar:0},T:null,pinchAt:0,sheet:false,lastSec:-1};
+const S={view:'setup',ui:store.get('arc.ui','simple')==='expert'?'expert':'simple',params:Object.assign({style:'house',flavor:'',bpm:123,fmt:'standard',el:defEl,loop:{type:'none',len:16}},store.get('arc.params',{})),song:store.get('arc.current',null),bw:store.get('arc.bw',12),sel:{sec:0,bar:0},T:null,pinchAt:0,sheet:false,open:false,lastSec:-1};
 migrate(S.params);if(!FAM[S.params.style]){S.params.style='house';S.params.flavor='';}if(S.params.flavor===null)S.params.flavor='';
 migrate(S.song);if(S.song&&S.song.versions&&FAM[S.song.style])S.view='arrange';else S.song=null;
 
@@ -565,15 +634,29 @@ function ask(title,val,okLbl,cb){
  m.querySelector('form').onsubmit=e=>{e.preventDefault();close();cb(inp.value);};
  inp.focus();inp.select();
 }
+/* Menu qui monte du bas (choix de version) */
+function menu(title,items){
+ const m=document.createElement('div');m.className='modal msheet';
+ m.innerHTML=`<div class="menu"><div class="mgrab"></div><h4>${esc(title)}</h4>${items.map((it,i)=>`<button class="mi ${it.on?'on':''}" data-i="${i}">${it.html}${it.on?ic('check',20,2.4):'<i></i>'}</button>`).join('')}</div>`;
+ document.body.appendChild(m);
+ const close=()=>{m.classList.add('out');setTimeout(()=>m.remove(),200);};
+ m.addEventListener('click',e=>{const b=e.target.closest('.mi');if(b){close();items[+b.dataset.i].fn();}else if(e.target===m)close();});
+}
 function curVer(){const s=S.song;if(!s.versions[s.fmt])s.versions[s.fmt]=buildVersion(s,s.fmt);return s.versions[s.fmt];}
 function loopLabels(fam){return {main:fam==='house'?'Drop / Refrain':'Refrain',verse:fam==='house'?'Groove / Couplet':'Couplet',break:fam==='soul'?'Pont':'Break'};}
 function touched(){if(S.song.savedId)S.song.dirty=true;}
+function energyPaths(T,H,pad){
+ const N=T.total,pts=T.energy.map((v,b)=>[b+.5,H-pad-v*(H-pad*2-2)]),P=p=>p[0].toFixed(2)+','+p[1].toFixed(1);
+ return {line:'M'+pts.map(P).join(' L'),area:`M0,${H} L0,${pts[0][1].toFixed(1)} L`+pts.map(P).join(' L')+` L${N},${pts[pts.length-1][1].toFixed(1)} L${N},${H} Z`};
+}
+const EGRAD='<defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb84d" stop-opacity=".38"/><stop offset="1" stop-color="#ffb84d" stop-opacity="0"/></linearGradient></defs>';
 
 /* Zoom : toutes les positions de la grille sont en calc(var(--bw) * n), donc zoomer = changer une variable */
 function applyBw(grid){
  grid.style.setProperty('--bw',S.bw+'px');
  grid.classList.toggle('z-mid',S.bw<9&&S.bw>=4.5);
  grid.classList.toggle('z-lo',S.bw<4.5);
+ grid.classList.toggle('zlbl',S.bw>=14);
 }
 function setBw(bw,anchorBar,mx){
  const grid=$('#grid');if(!grid)return;
@@ -608,42 +691,58 @@ function attachSheet(sh){
   else if(!inMore&&Math.abs(dy)>30&&Math.abs(dy)>Math.abs(dx)*1.5&&(dy<0)!==S.sheet)ACT.sheet();
  },{passive:true});
 }
+/* Expert : les pistes s'étirent pour occuper la hauteur libre entre l'en-tête et le tiroir (24 à 42 px) */
+function sizeRows(){
+ const grid=$('#grid'),sh=$('.shead');if(!grid||!sh||!S.song)return;
+ const n=ORDER.filter(e=>S.song.el[e]).length||1,fixed=30+32+42;
+ const free=window.innerHeight-$('#hd').offsetHeight-6-fixed-(sh.offsetHeight+22)-$('#tabs').offsetHeight-8;
+ grid.style.setProperty('--rh',Math.max(24,Math.min(42,Math.floor(free/n)))+'px');
+}
+function setHH(){document.documentElement.style.setProperty('--hh',$('#hd').offsetHeight+'px');}
+window.addEventListener('resize',()=>{setHH();if(S.view==='arrange'&&S.ui==='expert')sizeRows();});
 
 const htitle=(t,s)=>`<div class="ht"><b>${esc(t)}</b>${s?`<small>${esc(s)}</small>`:''}</div>`;
+const modeSeg=()=>`<div class="seg sm" role="group" aria-label="Affichage">${[['simple','Simple'],['expert','Expert']].map(m=>`<button class="${S.ui===m[0]?'on':''}" data-act="ui" data-v="${m[0]}">${m[1]}</button>`).join('')}</div>`;
 function render(){
- document.body.className='v-'+S.view;
+ document.body.className='v-'+S.view+' m-'+S.ui;
  const tabs=[['setup','new','Créer'],['back','song','Morceau'],['saved','saved','Sauvegardes']],cur={setup:'setup',arrange:'back',saved:'saved'}[S.view];
  $('#tabs').innerHTML=tabs.map(t=>`<button class="tab ${t[0]===cur?'on':''}" data-act="${t[0]}" ${t[0]==='back'&&!S.song?'disabled':''}>${ic(t[1],24,t[0]===cur?2.4:2)}<span>${t[2]}</span></button>`).join('');
  if(S.view==='setup')renderSetup();else if(S.view==='saved')renderSaved();else renderArrange();
 }
 
+/* ---------- Créer ---------- */
 function renderSetup(){
- const P=S.params,fam=P.style,LL=loopLabels(fam),nOn=ORDER.filter(e=>P.el[e]).length;
+ const P=S.params,fam=P.style,LL=loopLabels(fam),nOn=ORDER.filter(e=>P.el[e]).length,expert=S.ui==='expert';
  const sc=$('.scroller'),scLeft=sc?sc.scrollLeft:0;
- $('#hd').innerHTML=LOGO+htitle('Nouveau morceau');
+ $('#hd').innerHTML=htitle('Nouveau morceau')+modeSeg();setHH();
+ const flavName=P.flavor&&FLAV[P.flavor]?FLAV[P.flavor].n:'couleur générale';
+ const loopTxt=P.loop.type==='none'?'sans loop':'loop '+LL[P.loop.type]+' '+P.loop.len;
  $('#view').innerHTML=`
  <section class="blk"><h2 class="lbl">Style</h2>
   <div class="seg">${Object.entries(FAM).map(([k,s])=>`<button class="${P.style===k?'on':''}" data-act="style" data-v="${k}">${s.n}</button>`).join('')}</div>
-  <div class="scroller">${[['','Générale'],...Object.entries(FLAV).filter(([k,f])=>f.fam===fam).map(([k,f])=>[k,f.n])].map(([k,n])=>`<button class="chip ${(P.flavor||'')===k?'on':''}" data-act="flavor" data-v="${k}">${n}</button>`).join('')}</div></section>
+  ${expert?`<div class="scroller">${[['','Générale'],...Object.entries(FLAV).filter(([k,f])=>f.fam===fam).map(([k,f])=>[k,f.n])].map(([k,n])=>`<button class="chip ${(P.flavor||'')===k?'on':''}" data-act="flavor" data-v="${k}">${n}</button>`).join('')}</div>`:''}</section>
  <section class="blk"><h2 class="lbl">Tempo</h2>
   <div class="tempo"><button data-act="bpm" data-v="-1" data-hold aria-label="Ralentir">${ic('minus',24,2.2)}</button><label><input id="bpm" type="number" inputmode="numeric" value="${P.bpm}" min="60" max="200" aria-label="BPM"><span>BPM</span></label><button data-act="bpm" data-v="1" data-hold aria-label="Accélérer">${ic('plus',24,2.2)}</button></div></section>
  <section class="blk"><h2 class="lbl">Version</h2>
   <div class="seg tall">${FMTS.map(f=>`<button class="${P.fmt===f[0]?'on':''}" data-act="fmt" data-v="${f[0]}">${f[1]}<small>${f[2]}</small></button>`).join('')}</div></section>
+ ${expert?`
  <section class="blk"><h2 class="lbl">Instruments<em>${nOn} sur ${ORDER.length}</em></h2>
   <div class="togs">${ORDER.map(e=>`<button class="tog ${P.el[e]?'on':''}" style="--c:${EL[e].c}" data-act="el" data-v="${e}" aria-pressed="${!!P.el[e]}"><i></i>${EL[e].sn||EL[e].name}</button>`).join('')}</div></section>
  <section class="blk"><h2 class="lbl">Loop de départ<em>si tu pars d’un loop existant</em></h2>
   <div class="togs">${[['none','Aucun'],['main',LL.main],['verse',LL.verse],['break',LL.break]].map(o=>`<button class="chip ${P.loop.type===o[0]?'on':''}" data-act="loop" data-v="${o[0]}">${o[1]}</button>`).join('')}</div>
-  ${P.loop.type!=='none'?`<div class="seg" style="margin-top:12px">${[8,16].map(n=>`<button class="${P.loop.len===n?'on':''}" data-act="looplen" data-v="${n}">${n} mesures</button>`).join('')}</div>`:''}</section>
+  ${P.loop.type!=='none'?`<div class="seg" style="margin-top:12px">${[8,16].map(n=>`<button class="${P.loop.len===n?'on':''}" data-act="looplen" data-v="${n}">${n} mesures</button>`).join('')}</div>`:''}</section>`
+ :`<section class="blk"><button class="sumrow" data-act="ui" data-v="expert"><span><b>Réglages experts</b><small>${nOn} instruments · ${esc(flavName)} · ${esc(loopTxt)}</small></span>${ic('right',18,2.4)}</button></section>`}
  <div class="cta"><button class="primary" data-act="generate">Générer</button></div>`;
- $('.scroller').scrollLeft=scLeft;
+ const sc2=$('.scroller');if(sc2)sc2.scrollLeft=scLeft;
  const inp=$('#bpm');
  inp.addEventListener('change',e=>{P.bpm=Math.max(60,Math.min(200,Math.round(+e.target.value||P.bpm)));e.target.value=P.bpm;persist();});
  inp.addEventListener('focus',()=>setTimeout(()=>inp.select(),0));
 }
 
+/* ---------- Sauvegardes ---------- */
 function renderSaved(){
  const L=store.get('arc.saved',[]);
- $('#hd').innerHTML=htitle('Sauvegardes',L.length?L.length+' structure'+(L.length>1?'s':''):'');
+ $('#hd').innerHTML=htitle('Sauvegardes',L.length?L.length+' structure'+(L.length>1?'s':''):'');setHH();
  $('#view').innerHTML=L.length?`<div class="list">${L.map(x=>`<div class="item"><button class="iopen" data-act="open" data-v="${x.id}"><b><span>${esc(x.name)}</span>${S.song&&S.song.savedId===x.id?'<em>ouvert</em>':''}</b><small>${esc(FAM[migrate(x.song).style]?titleOf(x.song):'')} · ${x.song.bpm} BPM · ${new Date(x.date).toLocaleDateString('fr-FR')}</small></button><button class="idel" data-act="del" data-v="${x.id}" aria-label="Supprimer">${ic('trash',20)}</button></div>`).join('')}</div>`
   :`<div class="empty">${ic('saved',44,1.5)}<p>Rien de sauvegardé pour l’instant.</p><p>Génère une structure, puis touche le signet.</p><button class="ghostbtn" data-act="setup">${ic('new',18)}Créer un morceau</button></div>`;
 }
@@ -655,19 +754,66 @@ function diffTags(prev,p,el){
   out.push(`<span class="ch"><i style="background:${EL[e].c}"></i><b class="${cls}">${sym}</b>${EL[e].name}${b?` <em>${EL[e].lv[b]}</em>`:''}</span>`);});
  return out.join('')||'<span class="ch"><em>pas de changement</em></span>';
 }
+const lenCtl=sel=>`<div class="len"><button data-act="len" data-v="-1" aria-label="Raccourcir">${ic('minus',20)}</button><b>${barsTxt(sel.bars)}</b><button data-act="len" data-v="1" aria-label="Rallonger">${ic('plus',20)}</button></div>`;
+const ideaBox=x=>`<div class="idea">${ic('idea',18)}<span>${esc(x)}</span></div>`;
 
+/* ---------- Morceau ---------- */
 function renderArrange(){
- const old=$('#grid'),oldLeft=old?old.scrollLeft:0,om=$('#more'),omTop=om?om.scrollTop:0;
  const song=S.song,ver=curVer(),T=S.T=timeline(song,ver),tpl=tplOf(song);
  if(S.sel.sec>=T.secs.length)S.sel.sec=0;
  S.sel.bar=Math.min(S.sel.bar,T.total-1);
- let sel=T.secs[S.sel.sec];
+ const sel=T.secs[S.sel.sec];
  if(S.sel.bar<sel.start||S.sel.bar>=sel.start+sel.bars)S.sel.bar=sel.start;
- const N=T.total,bpm=song.bpm,isSaved=!!(song.savedId&&!song.dirty);
- $('#hd').innerHTML=htitle(tpl.n,`${titleOf(song)} · ${bpm} BPM · ${fmtT(N*240/bpm)}`)+
+ const N=T.total,bpm=song.bpm,isSaved=!!(song.savedId&&!song.dirty),fl=FMTS.find(f=>f[0]===song.fmt)||FMTS[1];
+ $('#hd').innerHTML=htitle(tpl.n,`${titleOf(song)} · ${bpm} BPM`)+
   `<button class="icb" data-act="regen" aria-label="Tirer une autre structure">${ic('regen',20)}</button>`+
   `<button class="icb ${isSaved?'on':''}" data-act="save" aria-label="${isSaved?'Sauvegardé':'Sauver'}">${ic('saved',20,2,isSaved)}</button>`+
-  `<div class="vbar"><div class="seg">${FMTS.map(f=>`<button class="${song.fmt===f[0]?'on':''}" data-act="ver" data-v="${f[0]}">${f[1]}</button>`).join('')}</div></div>`;
+  `<div class="vbar"><button class="verchip" data-act="vermenu" aria-label="Changer de version"><b>${fl[1]}</b><span>${fmtT(N*240/bpm)}</span>${ic('down',14,2.6)}</button><span class="grow"></span>${modeSeg()}</div>`;
+ setHH();
+ if(S.ui==='expert')renderExpert(T,sel);else renderSimple(T,sel);
+}
+
+/* Simple : aperçu collant du morceau + une carte par section, qui se déplie */
+function renderSimple(T,sel){
+ const song=S.song,N=T.total,bpm=song.bpm,els=ORDER.filter(e=>song.el[e]),open=S.open;
+ const st=T.secs.map(s=>{const max={};s.phrases.forEach(p=>{for(const e in p.lv)if(p.lv[e])max[e]=Math.max(max[e]||0,p.lv[e]);});let en=0;for(let b=s.start;b<s.start+s.bars;b++)en+=T.energy[b];return {max,en:en/s.bars};});
+ const enMax=Math.max(...st.map(x=>x.en))||1;
+ const H=36,ep=energyPaths(T,H,3);
+ const ov=`<div class="ov"><svg class="ovsvg" viewBox="0 0 ${N} ${H}" preserveAspectRatio="none" aria-hidden="true">${EGRAD}<path d="${ep.area}" fill="url(#eg)"/><path d="${ep.line}" fill="none" stroke="#ffb84d" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
+  <div class="ovbar">${T.secs.map(s=>{const c=SEC[s.type].c,on=open&&s.i===sel.i;return `<button class="ovs${on?' on':''}" style="flex:${s.bars};background:${on||!open?c:rgba(c,.28)}" data-act="pick" data-v="${s.i}" aria-label="${esc(s.name)}"></button>`;}).join('')}</div>
+  <div class="ovt"><span>0:00</span><span>${N} mesures</span><span>${fmtT(N*240/bpm)}</span></div></div>`;
+ const list=T.secs.map((s,i)=>{
+  const x=st[i],c=SEC[s.type].c,isOpen=open&&i===sel.i,lvl=Math.max(1,Math.round(x.en/enMax*5));
+  const dots=els.map(e=>{const l=x.max[e]||0;return `<i${l?` style="background:${rgba(EL[e].c,DOT_OP[l])}"`:''}></i>`;}).join('');
+  let h=`<div class="sc${isOpen?' open':''}" id="sc${i}"><button class="sch" data-act="pick" data-v="${i}" aria-expanded="${isOpen}">
+   <span class="scc" style="background:${c}"></span>
+   <span class="scm"><span class="sct"><span>${esc(s.name)}</span>${s.loop?'<em>ton loop</em>':''}${s.ideas&&!isOpen?'<i class="idot"></i>':''}</span>
+    <span class="scs">Mesure ${s.start+1} · ${barsTxt(s.bars)}</span>
+    <span class="dots">${dots}</span></span>
+   <span class="meter" aria-label="Énergie ${lvl} sur 5">${[6,9,12,15,18].map((hh,k)=>`<i style="height:${hh}px"${k<lvl?' class="on"':''}></i>`).join('')}</span></button>`;
+  if(isOpen){
+   const pm=i>0?st[i-1].max:{},ins=els.filter(e=>x.max[e]&&!pm[e]),outs=els.filter(e=>!x.max[e]&&pm[e]);
+   const chip=(e,sg)=>`<span class="ch"><i style="background:${EL[e].c}"></i><b class="${sg==='+'?'pos':'neg'}">${sg}</b>${EL[e].name}</span>`;
+   const t0=s.start*240/bpm,t1=(s.start+s.bars)*240/bpm;
+   h+=`<div class="scd">
+    <h3 class="sdl">${i===0?'Démarre avec':'Ce qui change'}</h3>
+    ${ins.length||outs.length?`<div class="chg">${ins.map(e=>chip(e,'+')).join('')}${outs.map(e=>chip(e,'−')).join('')}</div>`:'<p class="muted">Mêmes instruments, l’énergie évolue</p>'}
+    ${(s.ideas||[]).map(ideaBox).join('')}
+    <h3 class="sdl">Déroulé</h3>
+    ${s.phrases.map(p=>`<div class="sph"><span>${p.bars===1?p.start+1:(p.start+1)+'–'+(p.start+p.bars)}</span><p>${esc(p.note)}${p.up?' <b class="up">↗</b>':''}</p></div>`).join('')}
+    <div class="sfoot"><span>${fmtT(t0)} – ${fmtT(t1)}</span>${lenCtl(s)}</div></div>`;
+  }
+  return h+'</div>';
+ }).join('');
+ $('#view').innerHTML=ov+`<div class="scl">${list}</div>`;
+ if(S._scrollSec){S._scrollSec=false;const el=$('#sc'+sel.i),ovh=$('.ov').offsetHeight,hh=$('#hd').offsetHeight;
+  const top=el.getBoundingClientRect().top+window.scrollY-hh-ovh-6;window.scrollTo({top:Math.max(0,top),behavior:'smooth'});}
+}
+
+/* Expert : grille piste par piste + tiroir de détail mesure par mesure */
+function renderExpert(T,sel){
+ const old=$('#grid'),oldLeft=old?old.scrollLeft:0,om=$('#more'),omTop=om?om.scrollTop:0;
+ const song=S.song,N=T.total,bpm=song.bpm;
  const X=(n,px)=>`calc(var(--bw) * ${n}${px?(px>0?' + ':' - ')+Math.abs(px)+'px':''})`;
  const row=(hd,lane,cls,attr)=>`<div class="row ${cls}"><div class="hd"${attr||''}>${hd}</div><div class="lane" style="width:${X(N)}">${lane}</div></div>`;
  // règle (repères toutes les 4 mesures ; la densité s'adapte au zoom)
@@ -675,25 +821,20 @@ function renderArrange(){
  let g=row(`<button class="fitb" data-act="fit" aria-label="Tout afficher">${ic('fit',15,2.2)}</button>`,marks,'r-ruler');
  g+=row('<span>Sections</span>',T.secs.map(s=>{const c=SEC[s.type].c,on=s.i===S.sel.sec;
   return `<div class="sec ${on?'sel':''}" style="left:${X(s.start,1)};width:${X(s.bars,-2)};background:${on?c:rgba(c,.24)};box-shadow:inset 2px 0 0 ${c};color:${tint(c,.5)}">${s.loop?'↻ ':''}${esc(s.name)}${s.ideas?'<i class="idot"></i>':''}</div>`;}).join(''),'r-sec');
- // courbe d'énergie (unités = mesures, étirée par le zoom)
- const H=42,pts=T.energy.map((v,b)=>[b+.5,H-4-v*(H-9)]);
- const P=p=>p[0].toFixed(2)+','+p[1].toFixed(1);
- const line='M'+pts.map(P).join(' L');
- const area=`M0,${H} L0,${pts[0][1].toFixed(1)} L`+pts.map(P).join(' L')+` L${N},${pts[pts.length-1][1].toFixed(1)} L${N},${H} Z`;
- const svg=`<svg viewBox="0 0 ${N} ${H}" preserveAspectRatio="none" style="display:block;width:${X(N)};height:${H}px"><defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb84d" stop-opacity=".38"/><stop offset="1" stop-color="#ffb84d" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#eg)"/><path d="${line}" fill="none" stroke="#ffb84d" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`;
- g+=row('<span>Énergie</span>',svg,'r-energy');
- // pistes : l'opacité suit le niveau (léger → plein)
+ const H=42,ep=energyPaths(T,H,4);
+ g+=row(`<span>Énergie</span><small>${Math.round(T.energy[S.sel.bar]*100)} %</small>`,`<svg viewBox="0 0 ${N} ${H}" preserveAspectRatio="none" style="display:block;width:${X(N)};height:${H}px">${EGRAD}<path d="${ep.area}" fill="url(#eg)"/><path d="${ep.line}" fill="none" stroke="#ffb84d" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`,'r-energy');
+ // pistes : l'opacité suit le niveau ; le nom du niveau s'affiche quand on zoome
  ORDER.filter(e=>song.el[e]).forEach(e=>{
-  let regs='';
-  T.secs.forEach(s=>{let cur=null;const push=c=>{if(c&&c.l)regs+=`<div class="reg" style="left:${X(c.st,1)};width:${X(c.n,-2)};background:${rgba(EL[e].c,LV_OP[c.l])}"></div>`;};
+  let regs='';const c=EL[e].c;
+  T.secs.forEach(s=>{let cur=null;const push=r=>{if(r&&r.l)regs+=`<div class="reg" style="left:${X(r.st,1)};width:${X(r.n,-2)};background:${rgba(c,LV_OP[r.l])};--tc:${r.l===3?'rgba(0,0,0,.72)':tint(c,.6)}">${EL[e].lv[r.l]}</div>`;};
    s.phrases.forEach(p=>{const l=p.lv[e]||0;if(cur&&cur.l===l)cur.n+=p.bars;else{push(cur);cur={st:p.start,n:p.bars,l};}});push(cur);});
-  g+=row(`<i style="background:${EL[e].c}"></i><span>${EL[e].name}</span>`,regs,'r-trk',` data-act="hint" data-v="${e}"`);
+  g+=row(`<i style="background:${c}"></i><span>${EL[e].name}</span>`,regs,'r-trk',` data-act="hint" data-v="${e}"`);
  });
  g+=`<div class="selcol" style="left:calc(${HDW}px + var(--bw) * ${sel.start});width:${X(sel.bars)}"></div><div class="playhead" style="left:calc(${HDW}px + var(--bw) * ${S.sel.bar+.5})"></div>`;
  // tiroir de la section sélectionnée
  const t0=sel.start*240/bpm,t1=(sel.start+sel.bars)*240/bpm;
- let more=`<div class="lenrow"><span>Longueur</span><div class="len"><button data-act="len" data-v="-1" aria-label="Raccourcir">${ic('minus',20)}</button><b>${barsTxt(sel.bars)}</b><button data-act="len" data-v="1" aria-label="Rallonger">${ic('plus',20)}</button></div></div>`;
- (sel.ideas||[]).forEach(x=>more+=`<div class="idea">${ic('idea',18)}<span>${esc(x)}</span></div>`);
+ let more=`<div class="lenrow"><span>Longueur</span>${lenCtl(sel)}</div>`;
+ (sel.ideas||[]).forEach(x=>more+=ideaBox(x));
  more+=`<h3 class="lbl">Déroulé</h3>`;
  sel.phrases.forEach((p,pi)=>{
   const prev=pi>0?sel.phrases[pi-1]:(sel.i>0?T.secs[sel.i-1].phrases[T.secs[sel.i-1].phrases.length-1]:null);
@@ -703,7 +844,7 @@ function renderArrange(){
  const sheet=`<div class="sheet ${S.sheet?'open':''}" id="sheet">
  <div class="grab" data-act="sheet"><span></span></div>
  <div class="shead"><button class="nav" data-act="step" data-v="-1" ${sel.i>0?'':'disabled'} aria-label="Section précédente">${ic('left',22,2.2)}</button>
-  <button class="sinfo" data-act="sheet" aria-label="Afficher ou masquer le détail"><span class="sname"><i style="background:${SEC[sel.type].c}"></i><span>${esc(sel.name)}</span>${sel.loop?'<em>ton loop</em>':''}</span><span class="smeta">${barsTxt(sel.bars)} · ${fmtT(t0)}–${fmtT(t1)}${ic('up',14,2.4)}</span></button>
+  <button class="sinfo" data-act="sheet" aria-label="Afficher ou masquer le détail"><span class="sname"><i style="background:${SEC[sel.type].c}"></i><span>${esc(sel.name)}</span>${sel.loop?'<em>ton loop</em>':''}</span><span class="smeta">Mesures ${sel.start+1}–${sel.start+sel.bars} · ${fmtT(t0)}–${fmtT(t1)}${ic('up',14,2.4)}</span></button>
   <button class="nav" data-act="step" data-v="1" ${sel.i<T.secs.length-1?'':'disabled'} aria-label="Section suivante">${ic('right',22,2.2)}</button></div>
  <div class="more" id="more">${more}</div></div>`;
  $('#view').innerHTML=`<div class="grid" id="grid"><div class="gin" style="width:calc(var(--bw) * ${N} + ${HDW}px)">${g}</div></div>${sheet}`;
@@ -716,15 +857,6 @@ function renderArrange(){
  if(S._scrollTo){const x=S.sel.bar*S.bw,vw=grid.clientWidth-HDW;if(x<grid.scrollLeft||x>grid.scrollLeft+vw-20)grid.scrollLeft=Math.max(0,x-vw/3);S._scrollTo=false;}
 }
 
-/* Les pistes s'étirent pour occuper la hauteur libre entre l'en-tête et le tiroir (24 à 42 px) */
-function sizeRows(){
- const grid=$('#grid'),sh=$('.shead');if(!grid||!sh||!S.song)return;
- const n=ORDER.filter(e=>S.song.el[e]).length||1,fixed=30+32+42;
- const free=window.innerHeight-$('#hd').offsetHeight-6-fixed-(sh.offsetHeight+22)-$('#tabs').offsetHeight-8;
- grid.style.setProperty('--rh',Math.max(24,Math.min(42,Math.floor(free/n)))+'px');
-}
-window.addEventListener('resize',()=>{if(S.view==='arrange')sizeRows();});
-
 function selectBar(bar,scroll){const T=S.T;bar=Math.max(0,Math.min(T.total-1,bar));S.sel.bar=bar;S.sel.sec=T.barInfo[bar].s;S._scrollTo=!!scroll;render();}
 
 function newSong(seedOnly){
@@ -733,11 +865,12 @@ function newSong(seedOnly){
  const prev=seedOnly&&S.song.seed?tplOf(S.song).n:null,pool=poolOf(S.song);
  for(let t=0;t<20;t++){S.song.seed=Math.random().toString(36).slice(2,10);if(!prev||pool.length<2||tplOf(S.song).n!==prev)break;}
  S.song.versions={};delete S.song.savedId;delete S.song.dirty;
- S.sel={sec:0,bar:0};curVer();persist();
+ S.sel={sec:0,bar:0};S.open=false;curVer();persist();
 }
 function go(view){S.view=view;render();window.scrollTo(0,0);}
 
 const ACT={
+ ui(v){if(S.ui===v)return;S.ui=v;store.set('arc.ui',v);if(S.view==='arrange')S._fit=true;render();window.scrollTo(0,0);},
  style(v){S.params.style=v;S.params.flavor='';S.params.bpm=FAM[v].bpm;persist();render();},
  flavor(v){S.params.flavor=v;S.params.bpm=v?FLAV[v].bpm:FAM[S.params.style].bpm;persist();render();},
  bpm(v){const P=S.params;P.bpm=Math.max(60,Math.min(200,P.bpm+ +v));$('#bpm').value=P.bpm;persist();},
@@ -749,7 +882,13 @@ const ACT={
   if(!ORDER.some(e=>S.params.el[e])){toast('Choisis au moins un instrument');return;}
   newSong(false);S.sheet=false;S._fit=true;go('arrange');},
  regen(){newSong(true);S._fit=true;render();},
- ver(v){if(S.song.fmt===v)return;S.song.fmt=v;touched();S.sel={sec:0,bar:0};S._fit=true;persist();render();},
+ ver(v){if(S.song.fmt===v)return;S.song.fmt=v;touched();S.sel={sec:0,bar:0};S.open=false;S._fit=true;persist();render();},
+ vermenu(){
+  const song=S.song;
+  menu('Version',FMTS.map(f=>{const v=song.versions[f[0]]||(song.versions[f[0]]=buildVersion(song,f[0])),bars=v.sections.reduce((a,s)=>a+s.bars,0);
+   return {on:f[0]===song.fmt,fn:()=>ACT.ver(f[0]),html:`<span><b>${f[1]}</b><small>${barsTxt(bars)} · cible ${f[2]}</small></span><em>${fmtT(bars*240/song.bpm)}</em>`};}));
+ },
+ pick(v){const i=+v;if(S.sel.sec===i&&S.open){S.open=false;render();return;}S.sel.sec=i;S.sel.bar=S.T.secs[i].start;S.open=true;S._scrollSec=true;render();},
  fit(){const grid=$('#grid');if(!grid||!S.T)return;setBw((grid.clientWidth-HDW-6)/S.T.total,0,HDW);store.set('arc.bw',S.bw);},
  hint(e){const h=hintOf(S.song,e);if(h)toast(EL[e].name+' : '+h);},
  len(v){const s=curVer().sections[S.sel.sec],step=s.loop?S.song.loop.len:4,nb=s.bars+(+v)*step;if(nb<step||nb>128)return;s.bars=nb;touched();persist();render();},
@@ -767,7 +906,7 @@ const ACT={
    L.unshift({id:song.savedId,name:name.trim()||'Sans titre',date:Date.now(),song:clone(song)});
    store.set('arc.saved',L);persist();render();toast('Sauvegardé');});
  },
- open(v){const x=store.get('arc.saved',[]).find(x=>x.id===v);if(!x)return;S.song=migrate(clone(x.song));S.song.savedId=x.id;delete S.song.dirty;S.sel={sec:0,bar:0};S.sheet=false;S._fit=true;persist();go('arrange');},
+ open(v){const x=store.get('arc.saved',[]).find(x=>x.id===v);if(!x)return;S.song=migrate(clone(x.song));S.song.savedId=x.id;delete S.song.dirty;S.sel={sec:0,bar:0};S.open=false;S.sheet=false;S._fit=true;persist();go('arrange');},
  // suppression immédiate, avec « Annuler » dans le toast plutôt qu'une confirmation
  del(v){
   const L=store.get('arc.saved',[]),i=L.findIndex(x=>x.id===v);if(i<0)return;
